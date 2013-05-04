@@ -54,10 +54,11 @@ return array(
 
 		'mysql' => array(
 			'driver'    => 'mysql',
-			'host'      => 'tunnel.pagodabox.com:3306',
-			'database'  => 'kassandra',
-			'username'  => 'refugio',
-			'password'  => 'dEktPsYS',
+			'host'      => $_SERVER['DB1_HOST'],
+			'port'      => $_SERVER['DB1_PORT'],
+			'database'  => $_SERVER['DB1_NAME'],
+			'username'  => $_SERVER['DB1_USER'],
+			'password'  => $_SERVER['DB1_PASS'],
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
