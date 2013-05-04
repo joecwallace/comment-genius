@@ -36,12 +36,11 @@ function($) {
 		}).popover({
 			hideOnHTMLClick: false,
 			title: createPopoverTitle(),
-			content: 'empty',
+			content: createPopoverContent().after(createPopoverFooter())
 		}).click(function() {
 			$(this).popover('hideAll');
 			$(this).popover('show');
 		});
-
 		return map;
 	}
 
@@ -83,13 +82,32 @@ function($) {
 		head.appendChild(style);
 	}
 
-	function createPopoverTitle() {
-		var count = $('<span>').addClass('comment-count').text('0');
+	function createPopoverTitle(numberOfComments) {
+            numberOfComments = (numberOfComments || 0);
+		var count = $('<span>').addClass('comment-count').text(numberOfComments + ' Comments');
 		var close = $('<span>').addClass('close-btn').html('&times;');
 		var title = $('<h1>').addClass('popover-title').append(count).append(close);
 
 		return title;
 	}
+
+        function createPopoverContent(comments) {
+            return $('<div>').addClass('content-inner').text('empty content');
+        }
+
+        function createPopoverFooter(approval, disapproval) {
+            approval = (approval || 0);
+            disapproval = (disapproval || 0);
+            var addCommentName = $('<input>').addClass('add-comment-name').attr('placeholder', 'Your Name');
+            var addCommentEmail = $('<input>').addClass('add-comment-email').attr('placeholder', 'Your Email Address')
+            var addCommentText = $('<textarea>').addClass('add-comment-text').attr('cols', 1);
+            var approvals = $('<span>').addClass('approval').text(approval);
+            var disapprovals = $('<span>').addClass('dissaproval').text(disapproval)
+            var copyright = $('<span>').addClass('copyright').html('&copy; Comment Genius 2013')
+            var footer = $('<div>').addClass('footer').append(addCommentName).append(addCommentEmail)
+            .append(addCommentText).append(approvals).append(disapprovals).append(copyright);
+            return footer;
+        }
 
 	$(document).ready(function() {
 		selector = getSelector();
