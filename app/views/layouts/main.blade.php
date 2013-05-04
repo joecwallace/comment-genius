@@ -14,7 +14,7 @@
 		</div>
 
 		@section('scripts')
-			<script type="text/javascript" src="/components/jquery/jquery.js"></script>
+			<script type="text/javascript" data-main="/js/main" src="/components/require/require.js"></script>
 		@show
 	</body>
 </html>
