@@ -29,14 +29,16 @@ function($) {
 		var map = {};
 
 		$(selector).each(function() {
-			var hash = $.sha256($(this).text());
+      var that = $(this),
+			  hash = $.sha256(that.text());
 
-			map[hash] = $(this);
-			$(this).data('hash', hash);
-		}).popover({
-			hideOnHTMLClick: false,
-			title: createPopoverTitle(),
-			content: $('<div />').append(createPopoverContent()).append(createPopoverFooter()).html()
+			map[hash] = that;
+			that.data('hash', hash);
+      that.popover({
+        hideOnHTMLClick: false,
+        title: createPopoverTitle(),
+        content: $('<div />').append(createPopoverContent()).append(createPopoverFooter()).html()
+      });
 		}).click(function() {
 			$(this).popover('hideAll');
 			$(this).popover('show');
