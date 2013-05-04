@@ -15,8 +15,15 @@ class HomeController extends BaseController {
 	|
 	*/
 
-	public function showWelcome()
+	public function showHome()
 	{
+		$user = Auth::user();
+
+		if ($user)
+		{
+			return View::make('dashboard', compact('user'));
+		}
+
 		return View::make('hello');
 	}
 

@@ -15,6 +15,8 @@ Route::resource('{article}/comments', 'CommentsController', array(
 	'only' => array('index', 'store'),
 ));
 
+Route::resource('sites', 'SitesController');
+
 Route::post('signup', array(
 	'as' => 'signup',
 	'before' => 'guest',
@@ -36,6 +38,4 @@ Route::get('demo', function() {
 	return View::make('demo');
 });
 
-Route::get('/', function() {
-	return View::make('hello');
-});
+Route::get('/', 'HomeController@showHome');

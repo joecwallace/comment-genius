@@ -26,6 +26,11 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		return $this->validation;
 	}
 
+	public function sites()
+	{
+		return $this->hasMany('Site');
+	}
+
 	public function signUp($attributes)
 	{
 		$rules = array(
