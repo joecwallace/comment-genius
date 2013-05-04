@@ -11,7 +11,9 @@
 |
 */
 
-Route::resource('{article}/comments', 'CommentsController');
+Route::resource('{article}/comments', 'CommentsController', array(
+	'only' => array('index', 'store'),
+));
 
 Route::get('/', function() {
 	return View::make('hello');

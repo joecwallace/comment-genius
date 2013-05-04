@@ -1,0 +1,13 @@
+{
+  "name": "comment-genius",
+  "version": "0.0.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ],
+  "dependencies": {
+    "jquery": "~2.0.0",
+    "bootstrap": "~2.3.1"
+  }
+}
