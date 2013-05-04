@@ -7,15 +7,18 @@
 	console.log('Welcome to Comment Genius');
 
 	$.addComment = function(paragraph, email, text) {
-		var url = '//' + baseUrl + '/' + article + '/comments';
+		var url = '//' + baseUrl + '/' + article + '/comments',
+			hash = paragraph.data('hash');
 
-		$.post(url, {
-			element_hash: paragraph.data('hash'),
-			email: email,
-			text: text
-		}, function(data) {
-			appendCommentWidget(paragraph, data);
-		}, 'json');
+		if (hash) {
+			$.post(url, {
+				element_hash: paragraph.data('hash'),
+				email: email,
+				text: text
+			}, function(data) {
+				appendCommentWidget(paragraph, data);
+			}, 'json');
+		}
 	};
 
 	var myScriptTag = $('script').last(),
@@ -70,7 +73,22 @@
 	}
 
 	function appendCommentWidget(elem, val) {
-		elem.append('<span style="color:red;">Comment: ' + val.text + '</span>');
+		elem.append('<span class="comment-genius-widget">Comment: ' + val.text + '</span>');
+	}
+
+	function injectStyles() {
+		var head = document.head || document.getElementsByTagName('head')[0],
+			style = document.createElement('style');
+
+		style.type = 'text/css';
+
+		if (style.styleSheet) {
+			style.styleSheet.cssText = stylesString;
+		} else {
+			style.appendChild(document.createTextNode(stylesString));
+		}
+
+		head.appendChild(style);
 	}
 
 	$(document).ready(function() {
@@ -78,7 +96,17 @@
 		article = getArticleIdentifier();
 		elementMap = getCommentableMap();
 		comments = fetchComments();
+
+		if (myScriptTag.data('style') !== 'off') {
+			injectStyles();
+		}
 	});
+
+	var stylesString = "\
+		.comment-genius-widget {\
+			color: #00f;\
+		}\
+	";
 
 	/******************************************************/
 	/***** DO NOT EDIT BELOW THIS POINT               *****/
