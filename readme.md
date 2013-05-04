@@ -1,13 +1,6 @@
-## Laravel 4.x
+# Comment Genius
 
-### A Framework For Web Artisans
-
-[Official Documentation](http://four.laravel.com) (Under Active Development)
-
-### Contributing To Laravel
-
-**All issues and pull requests should be filed on the [laravel/framework](http://github.com/laravel/framework) repository.**
-
-### License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+1. ` curl -sS http://getcomposer.org/installer | php `
+1. ` php composer.phar install `
+1. ` php artisan migrate --env=local `
+1. ` php artisan serve `
