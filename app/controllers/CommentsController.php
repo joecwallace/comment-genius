@@ -20,7 +20,7 @@ class CommentsController extends \BaseController {
 	public function store($article)
 	{
 		return Comment::create(array(
-			'article' => Input::get('article'),
+			'article' => $article,
 			'element_hash' => Input::get('element_hash'),
 			'email' => Input::get('email'),
 			'text' => Input::get('text'),
