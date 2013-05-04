@@ -15,6 +15,5 @@ require.config({
 });
 require(['comment-genius'], function(commentGenius) {
   $(document).ready(function() {
-    commentGenius.addComment(3, 'tpote', 'I love making comments.');
   });
 });
