@@ -32,6 +32,10 @@ Route::any('logout', array(
 	'uses' => 'UsersController@logout',
 ));
 
+Route::get('demo', function() {
+	return View::make('demo');
+});
+
 Route::get('/', function() {
 	return View::make('hello');
 });

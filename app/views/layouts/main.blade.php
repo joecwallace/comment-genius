@@ -12,5 +12,9 @@
 		<div class="container-fluid">
 			@yield('content')
 		</div>
+
+		@section('scripts')
+			<!-- placeholder -->
+		@show
 	</body>
 </html>
