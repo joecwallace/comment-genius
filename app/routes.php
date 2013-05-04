@@ -15,6 +15,23 @@ Route::resource('{article}/comments', 'CommentsController', array(
 	'only' => array('index', 'store'),
 ));
 
+Route::post('signup', array(
+	'as' => 'signup',
+	'before' => 'guest',
+	'uses' => 'UsersController@store',
+));
+
+Route::post('login', array(
+	'as' => 'login',
+	'before' => 'guest',
+	'uses' => 'UsersController@login',
+));
+
+Route::any('logout', array(
+	'as' => 'logout',
+	'uses' => 'UsersController@logout',
+));
+
 Route::get('/', function() {
 	return View::make('hello');
 });
