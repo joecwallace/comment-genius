@@ -14,7 +14,7 @@
 		</div>
 
 		@section('scripts')
-			<!-- placeholder -->
+			<script type="text/javascript" src="/components/jquery/jquery.js"></script>
 		@show
 	</body>
 </html>
