@@ -12,3 +12,7 @@
 */
 
 Route::resource('{article}/comments', 'CommentsController');
+
+Route::get('/', function() {
+	return View::make('hello');
+});
