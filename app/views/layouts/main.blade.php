@@ -15,6 +15,7 @@
 
 		@section('scripts')
 			<script type="text/javascript" src="/components/jquery/jquery.js"></script>
+                        <script type="text/javascript" src="/components/jQuery.popover/jquery.popover-1.1.2.js"></script>
 		@show
 	</body>
 </html>
