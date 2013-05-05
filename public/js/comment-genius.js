@@ -40,7 +40,7 @@ function($) {
 		$(selector).each(function() {
       var that = $(this),
 			  hash = $.sha256(that.text()),
-        comments;
+        comments, count;
 
 			that.data('hash', hash);
 
@@ -48,18 +48,17 @@ function($) {
         comments = commentMap[hash];
       }
 
-      if (comments) {
-        that.append(
-          $('<span />').addClass('badge').text(comments.length).popover({
-            hideOnHTMLClick: false,
-            title: createPopoverTitle(comments.length),
-            content: $('<div />').append(createPopoverContent(comments)).append(createPopoverFooter(baseUrl)).html()
-          }).click(function() {
-            $(this).popover('hideAll');
-            $(this).popover('show');
-          });
-        );
-      }
+      count = comments ? comments.length : 0;
+      that.append(
+        $('<span />').addClass('badge').text(count).popover({
+          hideOnHTMLClick: false,
+          title: createPopoverTitle(count),
+          content: $('<div />').append(createPopoverContent(comments)).append(createPopoverFooter(baseUrl)).html()
+        }).click(function() {
+          $(this).popover('hideAll');
+          $(this).popover('show');
+        })
+      );
     });
 	}
 
