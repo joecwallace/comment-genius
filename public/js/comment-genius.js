@@ -106,7 +106,8 @@
 
 			$(this).data('hash', hash);
 
-			if($(this).text() == '') {
+			var emptyRegex = /^\s*$/;
+			if(emptyRegex.test($(this).text())) {
 				return;
 			}
 			widget.popover({
