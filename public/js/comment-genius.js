@@ -20,6 +20,7 @@ require([ 'jquery', 'jquery-sha256', 'jquery-popover' ], function($) {
 
 	var myScriptTag = $('script').last(),
 		baseUrl = getBaseUrl(myScriptTag),
+		lastUpdateTime = new Date(0),
 		textAreaConfig = {
 			'focusHeight': '60px',
 			'blurHeight': '20px'
@@ -147,6 +148,7 @@ require([ 'jquery', 'jquery-sha256', 'jquery-popover' ], function($) {
 				evt.preventDefault();
 
 				$.post($(this).attr('action'), $(this).serialize(), function(comment) {
+					lastUpdateTime = new Date(comment.created_at.date);
 					insertComment(comment);
 
 					toggleCommentForm($(this), false);
@@ -182,7 +184,6 @@ require([ 'jquery', 'jquery-sha256', 'jquery-popover' ], function($) {
 
 	function populateComments(since) {
 		var url = urlTo(getArticleIdentifier() + '/comments'),
-			lastUpdateTime = since ? since : new Date(0),
 			data = {};
 
 		if (since !== undefined) {
