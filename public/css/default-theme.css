@@ -2,6 +2,10 @@
     color: #00f;
 }
 
+.badge {
+	cursor: pointer;
+}
+
 .popover {
     border: 3px solid #005;
     max-width: 400px;
@@ -10,21 +14,32 @@
 .popover .title {
     background-color: rgba(0,0,125,0.1);
     border-bottom: 1px solid rgba(0,0,125,0.1);
-    height: 25px;
+    height: 35px;
     margin: -1px;
-    padding: 5px 0 0 5px;
 }
-.popover .title .comment-count {
+.popover .title .comment-count,
+.popover .title .approvals,
+.popover .title .disapprovals {
     display: block;
     float: left;
-    padding: 0px 5px 5px;
+	padding: 10px 0 5px 10px;
 }
 .popover .title .close-btn {
+	background-color: rgba(0,0,0,0.2);
     cursor: pointer;
     display: block;
     float: right;
-    padding: 0px 5px 5px;
+	font-size: 22px;
+	padding: 8px;
+	text-align: center;
+	width: 20px;
 }
+
+.popover .title .close-btn:hover {
+	background-color: rgba(0,0,0,0.5);
+	color: #FFF;
+}
+
 .popover .content-inner {
     margin: 0;
     padding: 0;
@@ -69,8 +84,13 @@
 }
 .popover .footer .copyright {
     float: right;
-    margin-right: 2px;
+	padding: 6px 2px;
 }
+
+.popover .footer button {
+	margin: 3px;
+}
+
 .popover .arrow {
     position: absolute;
     margin: 0;
@@ -87,6 +107,7 @@
 .popover .left-arrow {
     border-right: 5px solid #005;
     right: 100%;
+	margin-left: -3px;
     margin-top: -3px;
     top: 50%;
 }
@@ -94,6 +115,7 @@
     border-left: 5px solid #005;
     left: 100%;
     margin-top: -3px;
+	margin-left: 3px;
     top: 50%;
 }
 .popover .bottom-arrow {
