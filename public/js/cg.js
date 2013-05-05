@@ -9101,6 +9101,7 @@ if ( typeof window === "object" && typeof window.document === "object" ) {
 						$('<div class="content" />')
 							.html(options.content instanceof jQuery ? options.content.html() : options.content)
 							.appendTo(popover.find('.wrap'));
+                                                        
 					}
 
 					$this.data('popover', data);
@@ -9418,11 +9419,12 @@ if ( typeof window === "object" && typeof window.document === "object" ) {
 			return this.each(function() {
 				var $this = $(this);
 				var data = $this.popover('getData');
-				
+				console.log('setting content to:', html);
 				if (data) {
 					var content = data.popover.find('.content');
 					var wrap = data.popover.find('.wrap');
 					if (content.length === 0) {
+                                            console.log('content length is zero, appending fresh div')
 						content = $('<div class="content" />').appendTo(wrap);
 					}
 					content.html(html);
@@ -9606,6 +9608,9 @@ if ( typeof window === "object" && typeof window.document === "object" ) {
 
 			$(this).data('hash', hash);
 
+			if($(this).text() == '') {
+				return;
+			}
 			widget.popover({
 				hideOnHTMLClick: false,
 				title: createPopoverTitle(),
@@ -9629,7 +9634,7 @@ if ( typeof window === "object" && typeof window.document === "object" ) {
 				toggleCommentForm($(this).parents('.add-comment-form'), true);
 			});
 
-			popover.find('.add-comment-text, .add-comment-name, .add-comment-email').change(function(){
+			popover.find('.add-comment-text, .add-comment-name, .add-comment-email').keyup(function(){
 				var form = $(this).parents('.add-comment-form');
 				var submit = form.find('.submit-neutral');
 
@@ -9640,16 +9645,17 @@ if ( typeof window === "object" && typeof window.document === "object" ) {
 
 			popover.find('.add-comment-form').submit(function(evt) {
 				evt.preventDefault();
-
+				var form = $(this);
 				var commentData = $(this).serialize()
 				var valid = validateCommentFormInput(this);
 
 				if(valid) {
+					form.find('input, textarea').val('');
 					$.post($(this).attr('action'), commentData, function(comment) {
 						lastUpdateTime = new Date(comment.created_at.date);
 						insertComment(comment);
 
-						toggleCommentForm($(this), false);
+						toggleCommentForm(form, false);
 					}, 'json');
 				}
 			});
@@ -9664,15 +9670,12 @@ if ( typeof window === "object" && typeof window.document === "object" ) {
 		var nameField = $form.find('.add-comment-name'),
 			emailField = $form.find('.add-comment-email'),
 			textField = $form.find('.add-comment-text');
-
 		var validEmail = (emailRegex.test(emailField.val()));
 		var validName = (nameField.val().length > 1);
 		var validText = (textField.val().length > 2);
-
 		(!validName) ? nameField.addClass('error') : nameField.removeClass('error');
 		(!validEmail) ? emailField.addClass('error') : emailField.removeClass('error');
 		(!validText) ? textField.addClass('error') : textField.removeClass('error');
-		
 		return (validName && validEmail && validText);
 	}
 

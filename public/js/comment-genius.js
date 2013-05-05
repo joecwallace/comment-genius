@@ -106,6 +106,9 @@
 
 			$(this).data('hash', hash);
 
+			if($(this).text() == '') {
+				return;
+			}
 			widget.popover({
 				hideOnHTMLClick: false,
 				title: createPopoverTitle(),
@@ -129,7 +132,7 @@
 				toggleCommentForm($(this).parents('.add-comment-form'), true);
 			});
 
-			popover.find('.add-comment-text, .add-comment-name, .add-comment-email').change(function(){
+			popover.find('.add-comment-text, .add-comment-name, .add-comment-email').keyup(function(){
 				var form = $(this).parents('.add-comment-form');
 				var submit = form.find('.submit-neutral');
 
@@ -140,17 +143,17 @@
 
 			popover.find('.add-comment-form').submit(function(evt) {
 				evt.preventDefault();
-
+				var form = $(this);
 				var commentData = $(this).serialize()
 				var valid = validateCommentFormInput(this);
 
 				if(valid) {
-
+					form.find('input, textarea').val('');
 					$.post($(this).attr('action'), commentData, function(comment) {
 						lastUpdateTime = new Date(comment.created_at.date);
 						insertComment(comment);
 
-						toggleCommentForm($(this), false);
+						toggleCommentForm(form, false);
 					}, 'json');
 				}
 			});
