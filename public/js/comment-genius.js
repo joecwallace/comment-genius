@@ -88,47 +88,56 @@ function($) {
 		elem.append('<span class="comment-genius-widget">Comment: ' + val.text + '</span>');
 	}
 
-	function injectStyles() {
+	function injectStyles(styleData) {
 		var head = document.head || document.getElementsByTagName('head')[0],
 			style = document.createElement('style');
-
 		style.type = 'text/css';
-
 		if (style.styleSheet) {
-			style.styleSheet.cssText = stylesString;
+			style.styleSheet.cssText = styleData;
 		} else {
-			style.appendChild(document.createTextNode(stylesString));
+			style.appendChild(document.createTextNode(styleData));
 		}
 
 		head.appendChild(style);
 	}
 
-	function createPopoverTitle(numberOfComments) {
+	function createPopoverTitle(numberOfComments, approvals, disapprovals) {
             numberOfComments = (numberOfComments || 0);
-		var count = $('<span>').addClass('comment-count').text(numberOfComments + ' Comments');
-		var close = $('<span>').addClass('close-btn').html('&times;');
-		var title = $('<h1>').addClass('popover-title').append(count).append(close);
+            approvals = (approvals || 0);
+            disapprovals = (disapprovals || 0);
+		var count = $('<span>').addClass('comment-count').text(numberOfComments + ' Comments ');
+		var approval = $('<span>').addClass('approvals').text(approvals + ' Approve ');
+                var disapproval = $('<span>').addClass('approvals').text(disapprovals + ' Disaprove');
+                var close = $('<span>').addClass('close-btn').html('&times;');
+		var title = $('<h1>').addClass('popover-title').append(count)
+                .append(approval).append(disapproval).append(close);
 
 		return title;
 	}
 
-  function createPopoverContent(comments) {
-      return $('<div />').addClass('content-inner').text('empty content');
-  }
+        function createPopoverContent(comments) {
+            var content = $('<ul>').addClass('content-inner');
+            if(comments && comments.length > 0) {
+                var innerContent;
+                for(var i=0; i< comments.length; i++) {
+                    innerContent += '<li><strong>' + comments[i].name + '</strong>' + comments[i].text + '</li>';
+                }
+                content.html(innerContent);
+            } else {
+                content.html('<li class="no-comments">No one has commented yet. Why don\'t you be the first?</li>');
+            }
+            return content;
+        }
 
-  function createPopoverFooter(approval, disapproval) {
-      approval = (approval || 0);
-      disapproval = (disapproval || 0);
-      var addCommentName = $('<input />').addClass('add-comment-name').attr('placeholder', 'Your Name');
-      var addCommentEmail = $('<input />').addClass('add-comment-email').attr('placeholder', 'Your Email Address')
-      var addCommentText = $('<textarea />').addClass('add-comment-text').attr('cols', 1);
-      var approvals = $('<span />').addClass('approval').text(approval);
-      var disapprovals = $('<span />').addClass('dissaproval').text(disapproval)
-      var copyright = $('<span />').addClass('copyright').html('&copy; Comment Genius 2013')
-      var footer = $('<div />').addClass('footer').append(addCommentName).append(addCommentEmail)
-      .append(addCommentText).append(approvals).append(disapprovals).append(copyright);
-      return footer;
-  }
+        function createPopoverFooter() {
+            var addCommentName = $('<input>').addClass('add-comment-name').attr('placeholder', 'Your Name');
+            var addCommentEmail = $('<input>').addClass('add-comment-email').attr('placeholder', 'Your Email Address')
+            var addCommentText = $('<textarea>').addClass('add-comment-text').attr('cols', 1);
+            var copyright = $('<a href="#">').addClass('copyright').html('&copy; Comment Genius 2013')
+            var footer = $('<div>').addClass('footer clearfix').append(addCommentEmail)
+            .append(addCommentName).append(addCommentText).append(copyright);
+            return footer;
+        }
 
 	$(document).ready(function() {
 		selector = getSelector();
@@ -137,15 +146,11 @@ function($) {
 		comments = fetchComments();
 
 		if (myScriptTag.data('style') !== 'off') {
-			injectStyles();
+                        $.get('//' + getBaseUrl() + '/css/default-theme.css', function(response){
+                            injectStyles(response);
+                        });
 		}
 	});
-
-	var stylesString = "\
-		.comment-genius-widget {\
-			color: #00f;\
-		}\
-	";
 
 	return {
     addComment: function(paragraphNumber, email, text) {
