@@ -4,6 +4,17 @@
     top: -4px;
     margin-left: 6px;
 }
+.badge:after {
+    border-left: 4px solid #999;
+    border-top: 4px solid #999;
+    border-right: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    display: block;
+    content: '';
+    height: 0;
+    width: 0;
+    position: absolute;
+}
 
 .popover {
     background: #ddd;
