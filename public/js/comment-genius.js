@@ -128,7 +128,7 @@
 				toggleCommentForm($(this).parents('.add-comment-form'), true);
 			});
 
-			popover.find('.add-comment-text, .add-comment-name, .add-comment-email').change(function(){
+			popover.find('.add-comment-text, .add-comment-name, .add-comment-email').keyup(function(){
 				var form = $(this).parents('form:first');
 				var submit = form.find('button');
 				(validateCommentFormInput(form)) ? submit.removeAttr('disabled') : submit.attr('disabled', 'disabled');
@@ -139,6 +139,7 @@
 				var commentData = $(this).serialize()
 				var valid = validateCommentFormInput(this);
 				if(valid) {
+
 					$.post($(this).attr('action'), commentData, function(comment) {
 						lastUpdateTime = new Date(comment.created_at.date);
 						insertComment(comment);
