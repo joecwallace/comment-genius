@@ -24,7 +24,9 @@ class HomeController extends BaseController {
 			return View::make('dashboard', compact('user'));
 		}
 
-		return View::make('hello');
+		$rootUrl = preg_replace('/^https?:/', '', Request::root());
+
+		return View::make('hello', compact('rootUrl'));
 	}
 
 }

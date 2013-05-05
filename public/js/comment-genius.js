@@ -1,24 +1,8 @@
-require.config({
-	paths: {
-		'jquery': '/components/jquery/jquery',
-		'jquery-sha256': '/components/jquery.sha256/jquery.sha256',
-		'jquery-popover': '/components/jQuery.popover/jquery.popover-1.1.2'
-	},
-	shim: {
-		'jquery-sha256': {
-			deps: ['jquery']
-		},
-		'jquery-popover': {
-			deps: ['jquery']
-		}
-	}
-});
-
-require([ 'jquery', 'jquery-sha256', 'jquery-popover' ], function($) {
+(function($) {
 
 	console.log('Welcome to Comment Genius');
 
-	var myScriptTag = $('script').last(),
+	var myScriptTag = $('#comment-genius').first(),
 		baseUrl = getBaseUrl(myScriptTag),
 		lastUpdateTime = new Date(0),
 		textAreaConfig = {
@@ -291,16 +275,15 @@ require([ 'jquery', 'jquery-sha256', 'jquery-popover' ], function($) {
 		return $('<div />').addClass('footer clearfix').append(form);
 	}
 
-	$(document).ready(function() {
-
-		var comments;
-
+	function init() {
 		injectStyles();
 		createCommentWidgets();
 
 		populateComments();
-	});
+	}
+
+	document.readyState === "complete" ? init() : $(document).ready(init);
 
 	return {};
 
-});
+}(jQuery));

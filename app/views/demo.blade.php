@@ -2,7 +2,7 @@
 
 @section('scripts')
 	@parent
-	<script type="text/javascript" data-main="/js/comment-genius" src="/components/require/require.js"></script>
+	<script id="comment-genius" type="text/javascript" src="//192.168.14.148:8000/js/cg.js"></script>
 @stop
 
 @section('content')
