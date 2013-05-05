@@ -112,7 +112,7 @@ function($) {
     var disapproval = $('<span>').addClass('approvals').text(disapprovals + ' Disapprove');
     var close = $('<span>').addClass('close-btn').html('&times;');
 		var title = $('<h1>').addClass('popover-title').append(count)
-                .append(approval).append(disapproval).append(close);
+                /*.append(approval).append(disapproval)*/.append(close);
 
 		return title;
 	}
