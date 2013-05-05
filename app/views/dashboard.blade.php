@@ -64,6 +64,32 @@
 			<h3 class="underline">Recent Comments</h3>
 		</div>
 	</div>
+	<div class="row-fluid">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Email</th>
+					<th>Comment</th>
+				</tr>
+			</thead>
+			<tbody>
+				@if (count($user->recentComments))
+					@foreach($user->recentComments as $comment)
+						<tr>
+							<td>{{ $comment->name }}</td>
+							<td>{{ $comment->email }}</td>
+							<td>{{ $comment->text }}</td>
+						</tr>
+					@endforeach
+				@else
+					<tr>
+						<td colspan="3"><em>Your sites don't have any comments yet.</em></td>
+					</tr>
+				@endif
+			</tbody>
+		</table>
+	</div>
 
 	{{ Form::open(array('action' => 'SitesController@store', 'class' => 'form-horizontal')) }}
 		<div id="new-site-modal" class="modal hide fade">

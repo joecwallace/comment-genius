@@ -46,6 +46,7 @@ class CommentsController extends \BaseController {
 				'email' => Input::get('email'),
 				'name' => Input::get('name'),
 				'text' => Input::get('text'),
+				'site_key' => Input::get('site_id', null),
 			)))->header('Access-Control-Allow-Origin', '*');
 		}
 

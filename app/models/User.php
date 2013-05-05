@@ -31,6 +31,11 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		return $this->hasMany('Site');
 	}
 
+	public function recentComments()
+	{
+		return $this->sites()->join('comments', 'sites.key', '=', 'comments.site_key');
+	}
+
 	public function signUp($attributes)
 	{
 		$rules = array(

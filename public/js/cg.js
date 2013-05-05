@@ -9767,6 +9767,12 @@ if ( typeof window === "object" && typeof window.document === "object" ) {
 
 		var hashInput = $('<input>').attr('type', 'hidden').attr('name', 'element_hash').val(hash);
 
+		var siteIdInput = '';
+		var siteId = myScriptTag.data('siteId');
+		if (siteId) {
+			siteIdInput = $('<input>').attr('type', 'hidden').attr('name', 'site_id').val(siteId);
+		}
+
 		var submitButton = $('<button>')
 			.addClass('submit-neutral').attr('disabled', 'disabled').text('Submit').hide();
 
@@ -9778,7 +9784,7 @@ if ( typeof window === "object" && typeof window.document === "object" ) {
 			action: url,
 			method: 'POST'
 		}).append(commentTextInput).append(commentNameInput)
-		.append(commentEmailInput).append(hashInput)
+		.append(commentEmailInput).append(hashInput).append(siteIdInput)
 		.append(submitButton).append(copyright);
 
 		return $('<div />').addClass('footer clearfix').append(form);
