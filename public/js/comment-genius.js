@@ -57,7 +57,7 @@ function($) {
           }).click(function() {
             $(this).popover('hideAll');
             $(this).popover('show');
-          })
+          });
         );
       }
     });
