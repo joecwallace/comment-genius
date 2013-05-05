@@ -53,7 +53,7 @@ function($) {
         $('<span />').addClass('badge').text(count).popover({
           hideOnHTMLClick: false,
           title: createPopoverTitle(count),
-          content: $('<div />').append(createPopoverContent(comments)).append(createPopoverFooter(baseUrl)).html()
+          content: $('<div />').append(createPopoverContent(comments)).append(createPopoverFooter(baseUrl, that.data('hash'))).html()
         }).click(function() {
           $(this).popover('hideAll');
           $(this).popover('show');
@@ -73,7 +73,14 @@ function($) {
 		$.getJSON(url, function(data) {
       var commentMap = createCommentMap(data);
 
-      insertComments(baseUrl, selector, commentMap);
+			insertComments(baseUrl, selector, commentMap);
+			$('.submit-neutral').click(function(){
+				var hash = $(this).attr('data-hash');
+				var name = $(this).parents('.popover').find('.add-comment-name').val();
+				var email = $(this).parents('.popover').find('.add-comment-email').val();
+				var text = $(this).parents('.popover').find('.add-comment-text').val();
+				submitNewComment(baseUrl, hash, name, email, text);
+			});
 		});
 	}
 
@@ -125,8 +132,8 @@ function($) {
     
     if (comments && comments.length != 0) {
       $.each(comments, function(index, comment) {
-        $('<li></li>').addClass('comment').text(comment.text).prepend($('<strong />').text(comment.name + ':')).appendTo(content);
-      });
+		  addCommentToSection(comment, content);
+        });
     } else {
       content.html('<li class="no-comments">Be the first to comment.</li>');
     }
@@ -134,16 +141,58 @@ function($) {
     return content;
   }
 
-  function createPopoverFooter(baseUrl) {
-      var addCommentName = $('<input>').addClass('add-comment-name').attr('placeholder', 'Name');
-      var addCommentEmail = $('<input>').addClass('add-comment-email').attr('placeholder', 'Email')
-      var addCommentText = $('<textarea>').addClass('add-comment-text').attr('cols', 1);
+  function createPopoverFooter(baseUrl, parentHash) {
+      var addCommentName = $('<input>').addClass('add-comment-name')
+		.attr('placeholder', 'Name').attr('maxlength', 20).attr('required', 'required');
+      var addCommentEmail = $('<input>').addClass('add-comment-email')
+	  .attr('placeholder', 'Email').attr('maxlength', 80).attr('required', 'required');
+      var addCommentText = $('<textarea>').addClass('add-comment-text').attr('cols', 1).attr('required', 'required');
       var copyright = $('<a href="http://' + baseUrl + '">').addClass('copyright').html('&copy; Comment Genius 2013')
-	  var submitButton = $('<button>').addClass('submit-neutral').attr('data-score', '0').text('Submit');
+	  var submitButton = $('<button>').addClass('submit-neutral').attr('data-hash', parentHash).attr('data-score', '0').text('Submit')
       var footer = $('<div>').addClass('footer clearfix').append(addCommentEmail)
       .append(addCommentName).append(addCommentText).append(submitButton).append(copyright)
       return footer;
   }
+
+	function submitNewComment(baseUrl, hash, name, email, text) {
+		var article = getArticleIdentifier();
+		var url = '//' + baseUrl + '/' + article + '/comments';
+
+		if (hash && email && name && text) {
+			$.post(url, {
+				element_hash: hash,
+				email: email,
+				name: name,
+				text: text
+			}, function(data) {
+				addCommentToSection(data);
+			}, 'json');
+		} else {
+		//TODO: Ask the user to fill out the required fields
+		}
+	}
+
+	function addCommentToSection(comment, section) {
+		var commentList;
+		if(section) {
+			if($(section).parent().find('.content-inner').size()>0) {
+				commentList = $(section).parent().find('.content-inner');
+			} else {
+				commentList = $(section);
+			}
+		} else {
+			$('.submit-neutral').each(function(){
+				if($(this).attr('data-hash') == comment.element_hash) {
+					commentList = $(this).parents('.popover').find('.content-inner');
+					return;
+				}
+			});
+			commentList.animate({scrollTop: commentList[0].scrollHeight}, 500);
+		}
+		$('<li></li>').addClass('comment').text(comment.text).prepend($('<strong />')
+		.text(comment.name + ': ')).appendTo(commentList);
+		return commentList;
+	}
 
 	$(document).ready(function() {
     var myScriptTag = $('script').last(),
@@ -172,7 +221,7 @@ function($) {
           email: email,
           text: text
         }, function(data) {
-          appendCommentWidget(paragraph, data);
+			addCommentToSection(paragraph, data);
         }, 'json');
       }
     }
