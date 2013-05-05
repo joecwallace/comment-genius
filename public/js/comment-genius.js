@@ -37,6 +37,21 @@ require([ 'jquery', 'jquery-sha256', 'jquery-popover' ], function($) {
 		return '//' + baseUrl + '/' + uri;
 	}
 
+	function padNumString(value) {
+		return value < 10 ? '0' + value : '' + value;
+	}
+
+	function formatDate(date) {
+		var year = date.getFullYear(),
+			month = padNumString(date.getMonth() + 1),
+			day = padNumString(date.getDate()),
+			hours = padNumString(date.getHours()),
+			minutes = padNumString(date.getMinutes()),
+			seconds = padNumString(date.getSeconds());
+
+		return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+	}
+
 	function getSelector() {
 		return myScriptTag.data('selector') || 'p';
 	}
@@ -165,13 +180,29 @@ require([ 'jquery', 'jquery-sha256', 'jquery-popover' ], function($) {
 			.prepend($('<strong />').text(comment.name + ': '));
 	}
 
-	function populateComments() {
-		var url = urlTo(getArticleIdentifier() + '/comments');
+	function populateComments(since) {
+		var url = urlTo(getArticleIdentifier() + '/comments'),
+			lastUpdateTime = since ? since : new Date(0),
+			data = {};
 
-		$.getJSON(url, function(data) {
+		if (since !== undefined) {
+			data.since = formatDate(since);
+		}
+
+		$.getJSON(url, data, function(data) {
 			for (var i = 0; i < data.length; i++) {
+				var created = new Date(data[i].created_at);
+
 				insertComment(data[i]);
+
+				if (created > lastUpdateTime) {
+					lastUpdateTime = created;
+				}
 			}
+
+			setTimeout(function() {
+				populateComments(lastUpdateTime);
+			}, 10000);
 		});
 	}
 

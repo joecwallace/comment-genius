@@ -9,8 +9,15 @@ class CommentsController extends \BaseController {
 	 */
 	public function index($article)
 	{
+		$query = Comment::where('article', $article);
+
+		if (Input::has('since'))
+		{
+			$query->where('created_at', '>', Input::get('since'));
+		}
+
 		return Response::make(
-			Comment::where('article', $article)->get()
+			$query->get()
 		)->header('Access-Control-Allow-Origin', '*');
 	}
 
