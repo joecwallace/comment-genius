@@ -1,0 +1,104 @@
+.comment-genius-widget {
+    color: #00f;
+}
+
+.popover {
+    border: 3px solid #005;
+    max-width: 400px;
+    width: 400px;
+}
+.popover .title {
+    background-color: rgba(0,0,125,0.1);
+    border-bottom: 1px solid rgba(0,0,125,0.1);
+    height: 25px;
+    margin: -1px;
+    padding: 5px 0 0 5px;
+}
+.popover .title .comment-count {
+    display: block;
+    float: left;
+    padding: 0px 5px 5px;
+}
+.popover .title .close-btn {
+    cursor: pointer;
+    display: block;
+    float: right;
+    padding: 0px 5px 5px;
+}
+.popover .content-inner {
+    margin: 0;
+    padding: 0;
+}
+.popover .content-inner li {
+    list-style-type: none;
+    padding: 5px;
+}
+.popover .content-inner li.no-comments {
+    font-style: italic;
+}
+.popover .footer {
+    background-color: rgba(0,0,125,0.1);
+    border-top: 1px solid rgba(0,0,125,0.1);
+    margin: -1px;
+}
+.popover .footer {
+    padding: 3px;
+}
+.popover .footer .add-comment-name,
+.popover .footer .add-comment-email{
+    border: 1px solid rgba(0,0,125,0.2);
+    border-radius: 4px;
+    padding: 2px 4px;
+    margin: 0 1px 4px 1px;
+    width: 180px;
+}
+.popover .footer .add-comment-name {
+    float: right;
+}
+.popover .footer .add-comment-email {
+    float: left;
+}
+.popover .footer textarea {
+    border: 1px solid rgba(0,0,125,0.2);
+    display: block;
+    margin: 0 auto;
+    width: 380px;
+}
+.popover .footer .approval {
+    margin-left: 2px;
+}
+.popover .footer .copyright {
+    float: right;
+    margin-right: 2px;
+}
+.popover .arrow {
+    position: absolute;
+    margin: 0;
+    width: 0;
+    height: 0;
+    border: 5px solid transparent;
+}
+.popover .top-arrow {
+    border-bottom: 5px solid #005;
+    left: 50%;
+    margin: -13px 0 0 -3px;
+    top: 0;
+}
+.popover .left-arrow {
+    border-right: 5px solid #005;
+    right: 100%;
+    margin-top: -3px;
+    top: 50%;
+}
+.popover .right-arrow {
+    border-left: 5px solid #005;
+    left: 100%;
+    margin-top: -3px;
+    top: 50%;
+}
+.popover .bottom-arrow {
+    border-top: 5px solid #005;
+    left: 50%;
+    top: 100%;
+    margin-top: 3px;
+}
