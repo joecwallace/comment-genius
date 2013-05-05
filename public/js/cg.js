@@ -9628,19 +9628,51 @@ if ( typeof window === "object" && typeof window.document === "object" ) {
 				toggleCommentForm($(this).parents('.add-comment-form'), true);
 			});
 
+			popover.find('.add-comment-text, .add-comment-name, .add-comment-email').change(function(){
+				var form = $(this).parents('.add-comment-form');
+				var submit = form.find('.submit-neutral');
+
+				(validateCommentFormInput(form)) ?
+					submit.removeAttr('disabled') :
+					submit.attr('disabled', 'disabled');
+			});
+
 			popover.find('.add-comment-form').submit(function(evt) {
 				evt.preventDefault();
 
-				$.post($(this).attr('action'), $(this).serialize(), function(comment) {
-					lastUpdateTime = new Date(comment.created_at.date);
-					insertComment(comment);
+				var commentData = $(this).serialize()
+				var valid = validateCommentFormInput(this);
 
-					toggleCommentForm($(this), false);
-				}, 'json');
+				if(valid) {
+					$.post($(this).attr('action'), commentData, function(comment) {
+						lastUpdateTime = new Date(comment.created_at.date);
+						insertComment(comment);
+
+						toggleCommentForm($(this), false);
+					}, 'json');
+				}
 			});
 
 			$(this).append(widget);
 		});
+	}
+
+	function validateCommentFormInput(form) {
+		var $form = $(form);
+		var emailRegex = /\S+@\S+\.\S+/;
+		var nameField = $form.find('.add-comment-name'),
+			emailField = $form.find('.add-comment-email'),
+			textField = $form.find('.add-comment-text');
+
+		var validEmail = (emailRegex.test(emailField.val()));
+		var validName = (nameField.val().length > 1);
+		var validText = (textField.val().length > 2);
+
+		(!validName) ? nameField.addClass('error') : nameField.removeClass('error');
+		(!validEmail) ? emailField.addClass('error') : emailField.removeClass('error');
+		(!validText) ? textField.addClass('error') : textField.removeClass('error');
+		
+		return (validName && validEmail && validText);
 	}
 
 	function insertComment(comment) {
@@ -9730,7 +9762,7 @@ if ( typeof window === "object" && typeof window.document === "object" ) {
 		var hashInput = $('<input>').attr('type', 'hidden').attr('name', 'element_hash').val(hash);
 
 		var submitButton = $('<button>')
-			.addClass('submit-neutral').text('Submit').hide();
+			.addClass('submit-neutral').attr('disabled', 'disabled').text('Submit').hide();
 
 		var copyright = $('<a />').attr('href', 'http://' + baseUrl)
 			.addClass('copyright').html('&copy; Comment Genius 2013');
