@@ -25,6 +25,7 @@ class CommentsController extends \BaseController {
 			'article' => $article,
 			'element_hash' => Input::get('element_hash'),
 			'email' => Input::get('email'),
+			'name' => Input::get('name'),
 			'text' => Input::get('text'),
 		)))->header('Access-Control-Allow-Origin', '*');
 	}
