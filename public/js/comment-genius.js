@@ -18,14 +18,26 @@ require([ 'jquery', 'jquery-sha256', 'jquery-popover' ], function($) {
 
 	console.log('Welcome to Comment Genius');
 
-	function getBaseUrl(myScriptTag) {
+	var myScriptTag = $('script').last(),
+		baseUrl = getBaseUrl(myScriptTag),
+		textAreaConfig = {
+			'focusHeight': '60px',
+			'blurHeight': '20px'
+		};
+
+	function getBaseUrl() {
 		var anchor = document.createElement('a');
-		anchor.href = $(myScriptTag).attr('src');
+
+		anchor.href = myScriptTag.attr('src');
 
 		return anchor.host;
 	}
 
-	function getSelector(myScriptTag) {
+	function urlTo(uri) {
+		return '//' + baseUrl + '/' + uri;
+	}
+
+	function getSelector() {
 		return myScriptTag.data('selector') || 'p';
 	}
 
@@ -33,193 +45,186 @@ require([ 'jquery', 'jquery-sha256', 'jquery-popover' ], function($) {
 		return $.sha256(location.host + location.pathname);
 	}
 
-	function insertComments(baseUrl, selector, commentMap) {
-		$(selector).each(function() {
-			var that = $(this),
-			hash = $.sha256(that.text()),
-			comments, count;
+	function getElementFromHash(hash) {
+		var elems = $(getSelector()), elem = null;
 
-			that.data('hash', hash);
+		for (var i = 0; i < elems.length; i++) {
+			elem = $(elems[i]);
 
-			if (commentMap) {
-				comments = commentMap[hash];
+			if (elem.data('hash') == hash) {
+				return elem;
+			}
+		}
+	}
+
+	function getPopoverForWidget(widget) {
+		return widget.popover('getData').popover;
+	}
+
+	function injectStyles() {
+		if (myScriptTag.data('style') === 'off') {
+			return;
+		}
+
+		$.get(urlTo('css/default-theme.css'), function(response) {
+
+			var head = document.head || document.getElementsByTagName('head')[0],
+				style = document.createElement('style');
+
+			style.type = 'text/css';
+
+			if (style.styleSheet) {
+				style.styleSheet.cssText = response;
+			} else {
+				style.appendChild(document.createTextNode(response));
 			}
 
-			count = comments ? comments.length : 0;
-			that.append(
-				$('<span />').addClass('badge').text(count).popover({
-					hideOnHTMLClick: false,
-					title: createPopoverTitle(count),
-					content: $('<div />').append(createPopoverContent(comments)).append(createPopoverFooter(baseUrl, that.data('hash'))).html()
-				}).click(function() {
-					$(this).popover('hideAll');
-					$(this).popover('show');
-				})
-			);
-		});
+			head.appendChild(style);
 
-		$('.close-btn').click(function() {
-			var popover = $(this).parents('.popover');
-
-			popover.hide();
-			popover.find('.add-comment-email, .add-comment-name, .submit-neutral').hide();
-			popover.find('.add-comment-text').css({ height: '20px' });
 		});
 	}
 
-	function populateComments(baseUrl, articleId, selector) {
-		var url = '//' + baseUrl + '/' + articleId + '/comments';
+	function createCommentWidgets() {
+		var selector = getSelector();
 
-		$.getJSON(url, function(data) {
-			var commentMap = createCommentMap(data);
+		$(selector).each(function() {
+			var hash = $.sha256($(this).text()),
+				widget = $('<span />').addClass('badge comment-genius-widget').text('0'),
+				popover = null;
 
-			insertComments(baseUrl, selector, commentMap);
-			$('.submit-neutral').click(function() {
-				var hash = $(this).attr('data-hash');
-				var name = $(this).parents('.popover').find('.add-comment-name').val();
-				var email = $(this).parents('.popover').find('.add-comment-email').val();
-				var text = $(this).parents('.popover').find('.add-comment-text').val();
-				submitNewComment(baseUrl, hash, name, email, text);
+			$(this).data('hash', hash);
+
+			widget.popover({
+				hideOnHTMLClick: false,
+				title: createPopoverTitle(),
+				content: createPopoverContent(hash)
+			}).click(function() {
+				$(this).popover('hideAll');
+				$(this).popover('show');
 			});
 
-			$('.add-comment-text').focus(function() {
-				$(this).animate({ height: '60px' }).parents('.popover')
+			popover = getPopoverForWidget(widget);
+
+			popover.find('.close-btn').click(function() {
+				$(this).parents('.popover').hide();
+			});
+
+			popover.find('.add-comment-text').focus(function() {
+				$(this).animate({ height: textAreaConfig.focusHeight }).parents('.popover')
 					.find('.add-comment-email, .add-comment-name, .submit-neutral')
 					.slideDown();
 			});
+
+			popover.find('.add-comment-form').submit(function(evt) {
+				evt.preventDefault();
+
+				$.post($(this).attr('action'), $(this).serialize(), function(comment) {
+					insertComment(comment);
+				}, 'json');
+			});
+
+			$(this).append(widget);
 		});
 	}
 
-	function createCommentMap(comments) {
-		var map = {};
+	function insertComment(comment) {
+		var widget, popover, count,
+			parent = getElementFromHash(comment.element_hash);
 
-		if (comments) {
-			$.each(comments, function(index, comment) {
-				var array = map[comment.element_hash] || [];
+		if (parent) {
+			widget = parent.find('.comment-genius-widget');
+			popover = getPopoverForWidget(widget);
 
-				array.push(comment);
+			popover.find('.no-comments').remove();
+			popover.find('.content-inner').append(
+				createCommentElement(comment)
+			);
 
-				map[comment.element_hash] = array;
-			});
+			count = parseInt(widget.text()) + 1;
+			widget.text('' + count);
 		}
-
-		return map;
 	}
 
-	function injectStyles(styleData) {
-		var head = document.head || document.getElementsByTagName('head')[0],
-		style = document.createElement('style');
-		style.type = 'text/css';
-
-		if (style.styleSheet) {
-			style.styleSheet.cssText = styleData;
-		} else {
-			style.appendChild(document.createTextNode(styleData));
-		}
-
-		head.appendChild(style);
+	function createCommentElement(comment) {
+		return $('<li />').addClass('comment').text(comment.text)
+			.prepend($('<strong />').text(comment.name + ': '));
 	}
 
-	function createPopoverTitle(numberOfComments, approvals, disapprovals) {
-		numberOfComments = (numberOfComments || 0);
-		approvals = (approvals || 0);
-		disapprovals = (disapprovals || 0);
-		var count = $('<span>').addClass('comment-count').text(numberOfComments + ' Comments ');
-		var approval = $('<span>').addClass('approvals').text(approvals + ' Approve ');
-		var disapproval = $('<span>').addClass('approvals').text(disapprovals + ' Disapprove');
-		var close = $('<span>').addClass('close-btn').html('&times;');
-		var title = $('<h1>').addClass('popover-title').append(count)
-		/*.append(approval).append(disapproval)*/.append(close);
+	function populateComments() {
+		var url = urlTo(getArticleIdentifier() + '/comments');
+
+		$.getJSON(url, function(data) {
+			for (var i = 0; i < data.length; i++) {
+				insertComment(data[i]);
+			}
+		});
+	}
+
+	function createPopoverTitle() {
+		var count = $('<span />').addClass('comment-count').text('0'),
+			close = $('<span />').addClass('close-btn').html('&times;'),
+			title = $('<h1 />').addClass('popover-title').append(count).append(' Comments').append(close);
 
 		return title;
 	}
 
-	function createPopoverContent(comments) {
-		var content = $('<ul />').addClass('content-inner');
-
-		if (comments && comments.length != 0) {
-			$.each(comments, function(index, comment) {
-				addCommentToSection(comment, content);
-			});
-		} else {
-			content.html('<li class="no-comments">Be the first to comment.</li>');
-		}
+	function createPopoverContent(hash) {
+		var content = $('<div />').append(createPopoverInner()).append(createPopoverFooter(hash));
 
 		return content;
 	}
 
-	function createPopoverFooter(baseUrl, parentHash) {
-		var addCommentName = $('<input>').addClass('add-comment-name')
-			.attr('placeholder', 'Name').attr('maxlength', 20).hide();
-		var addCommentEmail = $('<input>').addClass('add-comment-email')
-			.attr('placeholder', 'Email').attr('maxlength', 80).hide();
-		var addCommentText = $('<textarea>').addClass('add-comment-text').attr('cols', 1).css({ height: '20px' });
-		var copyright = $('<a href="http://' + baseUrl + '">').addClass('copyright').html('&copy; Comment Genius 2013');
-		var submitButton = $('<button>').addClass('submit-neutral').attr('data-hash', parentHash).attr('data-score', '0').text('Submit').hide();
-		var footer = $('<div>').addClass('footer clearfix').append(addCommentText)
-			.append(addCommentEmail).append(addCommentName).append(submitButton).append(copyright)
-		return footer;
+	function createPopoverInner() {
+		var emptyMessage = $('<li />').addClass('no-comments').text('Be the first to comment.');
+
+		return $('<ul />').addClass('content-inner').append(emptyMessage);
 	}
 
-	function submitNewComment(baseUrl, hash, name, email, text) {
-		var article = getArticleIdentifier();
-		var url = '//' + baseUrl + '/' + article + '/comments';
+	function createPopoverFooter(hash) {
+		var url = 'http:' + urlTo(getArticleIdentifier() + '/comments'),
+			form = $('<form />');
 
-		if (hash && email && name && text) {
-			$.post(url, {
-				element_hash: hash,
-				email: email,
-				name: name,
-				text: text
-			}, function(data) {
-				addCommentToSection(data);
-			}, 'json');
-		} else {
-			//TODO: Ask the user to fill out the required fields
-		}
-	}
+		var commentTextInput = $('<textarea>').attr('name', 'text')
+			.addClass('add-comment-text').attr('cols', 1)
+			.css({ height: textAreaConfig.blurHeight });
 
-	function addCommentToSection(comment, section) {
-		var commentList;
+		var commentNameInput = $('<input>').attr('name', 'name')
+			.addClass('add-comment-name').attr('placeholder', 'Name')
+			.attr('maxlength', 40).hide();
 
-		if(section) {
-			if($(section).parent().find('.content-inner').size()>0) {
-				commentList = $(section).parent().find('.content-inner');
-			} else {
-				commentList = $(section);
-			}
-		} else {
-			$('.submit-neutral').each(function() {
-				if($(this).attr('data-hash') == comment.element_hash) {
-					commentList = $(this).parents('.popover').find('.content-inner');
-					return;
-				}
-			});
+		var commentEmailInput = $('<input>').attr('name', 'email')
+			.addClass('add-comment-email').attr('placeholder', 'Email')
+			.attr('maxlength', 80).hide();
 
-			commentList.animate({scrollTop: commentList[0].scrollHeight}, 500);
-		}
+		var hashInput = $('<input>').attr('type', 'hidden').attr('name', 'element_hash').val(hash);
 
-		$('<li></li>').addClass('comment').text(comment.text).prepend($('<strong />')
-			.text(comment.name + ': ')).appendTo(commentList);
+		var submitButton = $('<button>')
+			.addClass('submit-neutral').text('Submit').hide();
 
-		return commentList;
+		var copyright = $('<a />').attr('href', 'http://' + baseUrl)
+			.addClass('copyright').html('&copy; Comment Genius 2013');
+
+		form.attr({
+			class: 'add-comment-form',
+			action: url,
+			method: 'POST'
+		}).append(commentTextInput).append(commentNameInput)
+		.append(commentEmailInput).append(hashInput)
+		.append(submitButton).append(copyright);
+
+		return $('<div />').addClass('footer clearfix').append(form);
 	}
 
 	$(document).ready(function() {
-		var myScriptTag = $('script').last(),
-			baseUrl = getBaseUrl(myScriptTag),
-			selector = getSelector(myScriptTag),
-			articleId = getArticleIdentifier();
 
-		populateComments(baseUrl, articleId, selector);
+		var comments;
 
-		if (myScriptTag.data('style') !== 'off') {
-			$.get('//' + getBaseUrl() + '/css/default-theme.css', function(response){
-				injectStyles(response);
-			});
-		}
+		injectStyles();
+		createCommentWidgets();
+
+		populateComments();
 	});
 
 	return {};
-	
+
 });
