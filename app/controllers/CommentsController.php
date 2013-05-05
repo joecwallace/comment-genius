@@ -9,8 +9,15 @@ class CommentsController extends \BaseController {
 	 */
 	public function index($article)
 	{
+		$query = Comment::where('article', $article);
+
+		if (Input::has('since'))
+		{
+			$query->where('created_at', '>', Input::get('since'));
+		}
+
 		return Response::make(
-			Comment::where('article', $article)->get()
+			$query->get()
 		)->header('Access-Control-Allow-Origin', '*');
 	}
 
@@ -21,13 +28,28 @@ class CommentsController extends \BaseController {
 	 */
 	public function store($article)
 	{
-		return Response::make(Comment::create(array(
-			'article' => $article,
-			'element_hash' => Input::get('element_hash'),
-			'email' => Input::get('email'),
-			'name' => Input::get('name'),
-			'text' => Input::get('text'),
-		)))->header('Access-Control-Allow-Origin', '*');
+		$input = Input::all();
+		$rules = array(
+			'element_hash' => 'required',
+			'email' => 'required|email',
+			'name' => 'required',
+			'text' => 'required',
+		);
+
+		$validation = Validator::make($input, $rules);
+
+		if ($validation->passes())
+		{
+			return Response::make(Comment::create(array(
+				'article' => $article,
+				'element_hash' => Input::get('element_hash'),
+				'email' => Input::get('email'),
+				'name' => Input::get('name'),
+				'text' => Input::get('text'),
+			)))->header('Access-Control-Allow-Origin', '*');
+		}
+
+		return Response::make($validation->errors(), 400);
 	}
 
 }
