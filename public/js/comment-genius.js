@@ -60,6 +60,10 @@ function($) {
         })
       );
     });
+
+		$('.close-btn').click(function(){
+			$(this).parents('.popover').hide();
+		});
 	}
 
 	function populateComments(baseUrl, articleId, selector) {
@@ -135,8 +139,9 @@ function($) {
       var addCommentEmail = $('<input>').addClass('add-comment-email').attr('placeholder', 'Email')
       var addCommentText = $('<textarea>').addClass('add-comment-text').attr('cols', 1);
       var copyright = $('<a href="http://' + baseUrl + '">').addClass('copyright').html('&copy; Comment Genius 2013')
-      var footer = $('<div>').addClass('footer clearfix').append(addCommentText)
-        .append(addCommentEmail).append(addCommentName).append(copyright);
+	  var submitButton = $('<button>').addClass('submit-neutral').attr('data-score', '0').text('Submit');
+      var footer = $('<div>').addClass('footer clearfix').append(addCommentEmail)
+      .append(addCommentName).append(addCommentText).append(submitButton).append(copyright)
       return footer;
   }
 
