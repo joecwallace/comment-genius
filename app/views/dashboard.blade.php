@@ -71,6 +71,7 @@
 					<th>Name</th>
 					<th>Email</th>
 					<th>Comment</th>
+					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -80,11 +81,16 @@
 							<td>{{ $comment->name }}</td>
 							<td>{{ $comment->email }}</td>
 							<td>{{ $comment->text }}</td>
+							<td>
+								<a class="btn btn-mini btn-success" href="#"><i class="icon icon-white icon-thumbs-up"></i></a>
+								<a class="btn btn-mini btn-warning" href="#"><i class="icon icon-white icon-thumbs-down"></i></a>
+								<a class="btn btn-mini btn-danger" href="#"><i class="icon icon-white icon-trash"></i></a>
+							</td>
 						</tr>
 					@endforeach
 				@else
 					<tr>
-						<td colspan="3"><em>Your sites don't have any comments yet.</em></td>
+						<td colspan="4"><em>Your sites don't have any comments yet.</em></td>
 					</tr>
 				@endif
 			</tbody>
