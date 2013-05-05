@@ -9,7 +9,9 @@ class CommentsController extends \BaseController {
 	 */
 	public function index($article)
 	{
-		return Comment::where('article', $article)->get();
+		return Response::make(
+			Comment::where('article', $article)->get()
+		)->header('Access-Control-Allow-Origin', '*');
 	}
 
 	/**
@@ -19,12 +21,12 @@ class CommentsController extends \BaseController {
 	 */
 	public function store($article)
 	{
-		return Comment::create(array(
+		return Response::make(Comment::create(array(
 			'article' => $article,
 			'element_hash' => Input::get('element_hash'),
 			'email' => Input::get('email'),
 			'text' => Input::get('text'),
-		));
+		)))->header('Access-Control-Allow-Origin', '*');
 	}
 
 }

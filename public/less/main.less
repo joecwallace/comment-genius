@@ -5,3 +5,9 @@
 @iconWhiteSpritePath: "../components/bootstrap/img/glyphicons-halflings-white.png";
 
 @import "../components/bootstrap/less/sprites.less";
+
+@scriptPopoverWidth: 500px;
+.script-popover + .popover {
+	max-width: @scriptPopoverWidth;
+	width: @scriptPopoverWidth;
+}

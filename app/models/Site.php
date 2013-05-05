@@ -16,9 +16,4 @@ class Site extends Eloquent {
 		$this->key = md5($this->name . time());
 	}
 
-	public function getIncludeTag()
-	{
-		return e('<script type="text/javascript" src="' . Request::root() . 'js/comment-genius.js" data-site-id="' . $this->key . '"></script>');
-	}
-
 }
