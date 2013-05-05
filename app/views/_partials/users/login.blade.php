@@ -2,11 +2,11 @@
 	<div class="control-group{{ $errors->has('authentication') ? ' error' : '' }}">
 		{{ Form::label('email', 'Email', array('class' => 'control-label')) }}
 		<div class="controls">
-			{{ Form::text('email') }}
+			{{ Form::text('email', null, array('class' => 'input-block-level')) }}
 		</div>
 		{{ Form::label('password', 'Password', array('class' => 'control-label')) }}
 		<div class="controls">
-			{{ Form::password('password') }}
+			{{ Form::password('password', array('class' => 'input-block-level')) }}
 			@if ($errors->has('authentication'))
 				<span class="help-block">{{ $errors->first('authentication') }}</span>
 			@endif

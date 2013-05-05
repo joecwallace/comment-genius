@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('layouts.dashboard')
 
 @section('scripts')
 	@parent
@@ -28,7 +28,7 @@
 	@endif
 	<div class="row-fluid">
 		<div class="span12">
-			<h3 style="border-bottom: 1px solid #ccc;">Sites
+			<h3 class="underline">Sites
 				<a class="btn btn-mini btn-info" href="#new-site-modal" data-toggle="modal">
 					<i class="icon icon-white icon-plus"></i>
 				</a>
@@ -51,7 +51,7 @@
 							<td>{{ $site->name }}</td>
 							<td>{{ $site->key }}</td>
 							<td>
-								<a class="btn btn-primary script-popover" href="#" data-require-url="{{ Request::root() . '/components/require/require.js' }}" data-main-url="{{ Request::root() . '/js/main.js' }}">Get it!</a>
+								<a class="btn btn-info script-popover" href="#" data-require-url="{{ Request::root() . '/components/require/require.js' }}" data-main-url="{{ Request::root() . '/js/main.js' }}">Get it!</a>
 							</td>
 						</tr>
 					@endforeach
@@ -65,7 +65,7 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span12">
-			<h3 style="border-bottom: 1px solid #ccc;">Recent Comments</h3>
+			<h3 class="underline">Recent Comments</h3>
 		</div>
 	</div>
 
