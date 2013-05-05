@@ -124,7 +124,7 @@ function($) {
                 }
                 content.html(innerContent);
             } else {
-                content.html('<li class="no-comments">No one has commented yet. Why don\'t you be the first?</li>');
+                content.html('<li class="no-comments">Be the first to comment.</li>');
             }
             return content;
         }
@@ -133,7 +133,7 @@ function($) {
             var addCommentName = $('<input>').addClass('add-comment-name').attr('placeholder', 'Your Name');
             var addCommentEmail = $('<input>').addClass('add-comment-email').attr('placeholder', 'Your Email Address')
             var addCommentText = $('<textarea>').addClass('add-comment-text').attr('cols', 1);
-            var copyright = $('<a href="#">').addClass('copyright').html('&copy; Comment Genius 2013')
+            var copyright = $('<a href="http://' + baseUrl + '">').addClass('copyright').html('&copy; Comment Genius 2013')
             var footer = $('<div>').addClass('footer clearfix').append(addCommentEmail)
             .append(addCommentName).append(addCommentText).append(copyright);
             return footer;
