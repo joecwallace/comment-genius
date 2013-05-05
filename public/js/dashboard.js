@@ -4,11 +4,7 @@ $(document).ready(function() {
 		placement: 'left',
 		trigger: 'click',
 		content: function() {
-			var tag = '&lt;script type=&quot;text/javascript&quot; data-main=&quot;' + 
-				$(this).data('requireUrl') +
-				'&quot; src=&quot;' +
-				$(this).data('mainUrl') +
-				'&quot;></script>';
+			var tag = '&lt;script id=&quot;comment-genius&quot; type=&quot;text/javascript&quot; data-site-id=&quot;' + $(this).data('siteId') + '&quot; src=&quot;' + $(this).data('mainUrl') + '&quot;&gt;&lt;/script&gt;';
 
 			var content = $('<input class="input-block-level" type="text" value="' + tag + '" style="margin-bottom:0;">');
 

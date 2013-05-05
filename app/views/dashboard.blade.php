@@ -2,10 +2,6 @@
 
 @section('scripts')
 	@parent
-	<script type="text/javascript" src="/components/bootstrap/js/bootstrap-modal.js"></script>
-	<script type="text/javascript" src="/components/bootstrap/js/bootstrap-tooltip.js"></script>
-	<script type="text/javascript" src="/components/bootstrap/js/bootstrap-popover.js"></script>
-	<script type="text/javascript" src="/js/dashboard.js"></script>
 @stop
 
 @section('content')
@@ -51,7 +47,7 @@
 							<td>{{ $site->name }}</td>
 							<td>{{ $site->key }}</td>
 							<td>
-								<a class="btn btn-info script-popover" href="#" data-require-url="{{ Request::root() . '/components/require/require.js' }}" data-main-url="{{ Request::root() . '/js/main.js' }}">Get it!</a>
+								<a class="btn btn-info script-popover" href="#" data-site-id="{{ $site->key }}" data-main-url="{{ Request::root() . '/js/cg.js' }}">Get it!</a>
 							</td>
 						</tr>
 					@endforeach
