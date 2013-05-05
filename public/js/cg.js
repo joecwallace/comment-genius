@@ -9689,6 +9689,11 @@ if ( typeof window === "object" && typeof window.document === "object" ) {
 			);
 
 			count = parseInt(widget.text()) + 1;
+			if(count == 1) {
+				popover.find('.comment-count').text(count+' Comment');
+			} else {
+				popover.find('.comment-count').text(count+' Comments');
+			}
 			widget.text('' + count);
 		}
 	}
@@ -9724,9 +9729,9 @@ if ( typeof window === "object" && typeof window.document === "object" ) {
 	}
 
 	function createPopoverTitle() {
-		var count = $('<span />').addClass('comment-count').text('0'),
+		var count = $('<span />').addClass('comment-count').text('0 Comments'),
 			close = $('<span />').addClass('close-btn').html('&times;'),
-			title = $('<h1 />').addClass('popover-title').append(count).append(' Comments').append(close);
+			title = $('<h1 />').addClass('popover-title').append(count).append(close);
 
 		return title;
 	}
