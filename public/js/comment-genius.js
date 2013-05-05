@@ -36,7 +36,7 @@ function($) {
 		return $.sha256(location.host + location.pathname);
 	}
 
-	function insertComments(selector, commentMap) {
+	function insertComments(baseUrl, selector, commentMap) {
 		$(selector).each(function() {
       var that = $(this),
 			  hash = $.sha256(that.text()),
@@ -53,7 +53,7 @@ function($) {
           $('<span />').addClass('badge').text(comments.length).popover({
             hideOnHTMLClick: false,
             title: createPopoverTitle(comments.length),
-            content: $('<div />').append(createPopoverContent(comments)).append(createPopoverFooter()).html()
+            content: $('<div />').append(createPopoverContent(comments)).append(createPopoverFooter(baseUrl)).html()
           }).click(function() {
             $(this).popover('hideAll');
             $(this).popover('show');
@@ -70,7 +70,7 @@ function($) {
 		$.getJSON(url, function(data) {
       var commentMap = createCommentMap(data);
 
-      insertComments(selector, commentMap);
+      insertComments(baseUrl, selector, commentMap);
 		});
 	}
 
@@ -131,7 +131,7 @@ function($) {
     return content;
   }
 
-  function createPopoverFooter() {
+  function createPopoverFooter(baseUrl) {
       var addCommentName = $('<input>').addClass('add-comment-name').attr('placeholder', 'Your Name');
       var addCommentEmail = $('<input>').addClass('add-comment-email').attr('placeholder', 'Your Email Address')
       var addCommentText = $('<textarea>').addClass('add-comment-text').attr('cols', 1);
