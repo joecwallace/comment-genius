@@ -109,7 +109,7 @@ function($) {
             disapprovals = (disapprovals || 0);
 		var count = $('<span>').addClass('comment-count').text(numberOfComments + ' Comments ');
 		var approval = $('<span>').addClass('approvals').text(approvals + ' Approve ');
-    var disapproval = $('<span>').addClass('approvals').text(disapprovals + ' Disaprove');
+    var disapproval = $('<span>').addClass('approvals').text(disapprovals + ' Disapprove');
     var close = $('<span>').addClass('close-btn').html('&times;');
 		var title = $('<h1>').addClass('popover-title').append(count)
                 .append(approval).append(disapproval).append(close);
@@ -125,7 +125,7 @@ function($) {
         $('<li></li>').addClass('comment').text(comment.text).prepend($('<strong />').text(comment.name + ':')).appendTo(content);
       });
     } else {
-      content.html('<li class="no-comments">No one has commented yet. Why don\'t you be the first?</li>');
+      content.html('<li class="no-comments">Be the first to comment.</li>');
     }
 
     return content;
