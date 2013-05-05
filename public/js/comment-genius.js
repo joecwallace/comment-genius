@@ -45,19 +45,23 @@ function($) {
 
 		$(selector).each(function() {
       var that = $(this),
-			  hash = $.sha256(that.text());
+			  hash = $.sha256(that.text()),
+        numberOfComments = 5;
 
 			map[hash] = that;
 			that.data('hash', hash);
-      that.popover({
-        hideOnHTMLClick: false,
-        title: createPopoverTitle(),
-        content: $('<div />').append(createPopoverContent()).append(createPopoverFooter()).html()
-      });
-		}).click(function() {
-			$(this).popover('hideAll');
-			$(this).popover('show');
-		});
+      that.append(
+        $('<span />').addClass('badge').text(numberOfComments).popover({
+          hideOnHTMLClick: false,
+          title: createPopoverTitle(5),
+          content: $('<div />').append(createPopoverContent()).append(createPopoverFooter()).html()
+        }).click(function() {
+          $(this).popover('hideAll');
+          $(this).popover('show');
+        })
+      );
+    });
+
 		return map;
 	}
 
