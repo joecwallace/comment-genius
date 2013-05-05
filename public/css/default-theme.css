@@ -50,15 +50,23 @@
     background: #fff;
     box-shadow: inset 0 0 2px #ccc;
     margin: 0;
+	max-height: 128px;
+	overflow-y: auto;
     padding: 0;
 }
 .popover .content-inner li {
     list-style-type: none;
     padding: 5px;
 }
+
+.popover .content-inner li:nth-child(2n) {
+	background-color: #EEE;
+}
+
 .popover .content-inner li.no-comments {
     font-style: italic;
 }
+
 .popover .footer {
     background-color: #eee;
     border-top: 1px solid #ccc;
