@@ -61,6 +61,17 @@ require([ 'jquery', 'jquery-sha256', 'jquery-popover' ], function($) {
 		return widget.popover('getData').popover;
 	}
 
+	function toggleCommentForm(form, show) {
+		form.find('.add-comment-text').animate({
+			height: show ? textAreaConfig.focusHeight : textAreaConfig.blurHeight
+		});
+
+		var inputs = form.find('.add-comment-name, .add-comment-email, .submit-neutral');
+
+		if (show) inputs.slideDown();
+		else inputs.slideUp();
+	}
+
 	function injectStyles() {
 		if (myScriptTag.data('style') === 'off') {
 			return;
@@ -106,13 +117,15 @@ require([ 'jquery', 'jquery-sha256', 'jquery-popover' ], function($) {
 			popover = getPopoverForWidget(widget);
 
 			popover.find('.close-btn').click(function() {
-				$(this).parents('.popover').hide();
+				var popover = $(this).parents('.popover');
+
+				popover.hide();
+
+				toggleCommentForm(popover.find('.add-comment-form'), false);
 			});
 
 			popover.find('.add-comment-text').focus(function() {
-				$(this).animate({ height: textAreaConfig.focusHeight }).parents('.popover')
-					.find('.add-comment-email, .add-comment-name, .submit-neutral')
-					.slideDown();
+				toggleCommentForm($(this).parents('.add-comment-form'), true);
 			});
 
 			popover.find('.add-comment-form').submit(function(evt) {
@@ -121,8 +134,7 @@ require([ 'jquery', 'jquery-sha256', 'jquery-popover' ], function($) {
 				$.post($(this).attr('action'), $(this).serialize(), function(comment) {
 					insertComment(comment);
 
-					$('.add-comment-text', this).animate({ height: textAreaConfig.blurHeight });
-					$('.add-comment-email, .add-comment-name, .submit-neutral').slideUp();
+					toggleCommentForm($(this), false);
 				}, 'json');
 			});
 
