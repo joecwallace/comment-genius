@@ -62,7 +62,11 @@ function($) {
     });
 
 		$('.close-btn').click(function(){
-			$(this).parents('.popover').hide();
+      var popover = $(this).parents('.popover');
+
+      popover.hide();
+			popover.find('.add-comment-email, .add-comment-name, .submit-neutral').hide();
+      popover.find('.add-comment-text').css({ height: '20px' });
 		});
 	}
 
@@ -81,6 +85,12 @@ function($) {
 				var text = $(this).parents('.popover').find('.add-comment-text').val();
 				submitNewComment(baseUrl, hash, name, email, text);
 			});
+
+      $('.add-comment-text').focus(function() {
+        $(this).animate({ height: '60px' }).parents('.popover')
+          .find('.add-comment-email, .add-comment-name, .submit-neutral')
+          .slideDown();
+      });
 		});
 	}
 
@@ -143,14 +153,14 @@ function($) {
 
   function createPopoverFooter(baseUrl, parentHash) {
       var addCommentName = $('<input>').addClass('add-comment-name')
-		.attr('placeholder', 'Name').attr('maxlength', 20).attr('required', 'required');
+		.attr('placeholder', 'Name').attr('maxlength', 20).hide();
       var addCommentEmail = $('<input>').addClass('add-comment-email')
-	  .attr('placeholder', 'Email').attr('maxlength', 80).attr('required', 'required');
-      var addCommentText = $('<textarea>').addClass('add-comment-text').attr('cols', 1).attr('required', 'required');
-      var copyright = $('<a href="http://' + baseUrl + '">').addClass('copyright').html('&copy; Comment Genius 2013')
-	  var submitButton = $('<button>').addClass('submit-neutral').attr('data-hash', parentHash).attr('data-score', '0').text('Submit')
-      var footer = $('<div>').addClass('footer clearfix').append(addCommentEmail)
-      .append(addCommentName).append(addCommentText).append(submitButton).append(copyright)
+	  .attr('placeholder', 'Email').attr('maxlength', 80).hide();
+      var addCommentText = $('<textarea>').addClass('add-comment-text').attr('cols', 1).css({ height: '20px' });
+      var copyright = $('<a href="http://' + baseUrl + '">').addClass('copyright').html('&copy; Comment Genius 2013');
+	  var submitButton = $('<button>').addClass('submit-neutral').attr('data-hash', parentHash).attr('data-score', '0').text('Submit').hide();
+      var footer = $('<div>').addClass('footer clearfix').append(addCommentText)
+      .append(addCommentEmail).append(addCommentName).append(submitButton).append(copyright)
       return footer;
   }
 
