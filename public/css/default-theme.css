@@ -1,5 +1,8 @@
 .badge {
 	cursor: pointer;
+    position: relative;
+    top: -4px;
+    margin-left: 6px;
 }
 
 .popover {
