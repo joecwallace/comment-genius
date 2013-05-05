@@ -21,18 +21,14 @@ require([
 function($) {
 	console.log('Welcome to Comment Genius');
 
-	var myScriptTag = $('script').last(),
-		baseUrl = getBaseUrl(),
-		selector, article, elementMap, comments;
-
-	function getBaseUrl() {
+	function getBaseUrl(myScriptTag) {
 		var anchor = document.createElement('a');
 		anchor.href = $(myScriptTag).attr('src');
 
 		return anchor.host;
 	}
 
-	function getSelector() {
+	function getSelector(myScriptTag) {
 		return myScriptTag.data('selector') || 'p';
 	}
 
@@ -40,53 +36,59 @@ function($) {
 		return $.sha256(location.host + location.pathname);
 	}
 
-	function getCommentableMap() {
-		var map = {};
-
+	function insertComments(selector, commentMap) {
 		$(selector).each(function() {
       var that = $(this),
 			  hash = $.sha256(that.text()),
-        numberOfComments = 5;
+        comments;
 
-			map[hash] = that;
 			that.data('hash', hash);
-      that.append(
-        $('<span />').addClass('badge').text(numberOfComments).popover({
-          hideOnHTMLClick: false,
-          title: createPopoverTitle(5),
-          content: $('<div />').append(createPopoverContent()).append(createPopoverFooter()).html()
-        }).click(function() {
-          $(this).popover('hideAll');
-          $(this).popover('show');
-        })
-      );
-    });
 
-		return map;
+      if (commentMap) {
+        comments = commentMap[hash];
+      }
+
+      if (comments) {
+        that.append(
+          $('<span />').addClass('badge').text(comments.length).popover({
+            hideOnHTMLClick: false,
+            title: createPopoverTitle(comments.length),
+            content: $('<div />').append(createPopoverContent(comments)).append(createPopoverFooter()).html()
+          }).click(function() {
+            $(this).popover('hideAll');
+            $(this).popover('show');
+          })
+        );
+      }
+    });
 	}
 
-	function fetchComments() {
-		var url = '//' + baseUrl + '/' + article + '/comments';
+	function populateComments(baseUrl, articleId, selector) {
+		var url = '//' + baseUrl + '/' + articleId + '/comments',
+      comments;
 
 		$.getJSON(url, function(data) {
-			comments = data;
-			insertComments();
+      var commentMap = createCommentMap(data);
+
+      insertComments(selector, commentMap);
 		});
 	}
 
-	function insertComments() {
-		$.each(comments, function(idx, val) {
-			var elem = elementMap[val.element_hash];
+  function createCommentMap(comments) {
+    var map = {};
 
-			if (elem) {
-				appendCommentWidget(elem, val);
-			}
-		});
-	}
+    if (comments) {
+      $.each(comments, function(index, comment) {
+        var array = map[comment.element_hash] || [];
+        
+        array.push(comment);
 
-	function appendCommentWidget(elem, val) {
-		elem.append('<span class="comment-genius-widget">Comment: ' + val.text + '</span>');
-	}
+        map[comment.element_hash] = array;
+      });
+    }
+
+    return map;
+  }
 
 	function injectStyles(styleData) {
 		var head = document.head || document.getElementsByTagName('head')[0],
@@ -107,48 +109,50 @@ function($) {
             disapprovals = (disapprovals || 0);
 		var count = $('<span>').addClass('comment-count').text(numberOfComments + ' Comments ');
 		var approval = $('<span>').addClass('approvals').text(approvals + ' Approve ');
-                var disapproval = $('<span>').addClass('approvals').text(disapprovals + ' Disaprove');
-                var close = $('<span>').addClass('close-btn').html('&times;');
+    var disapproval = $('<span>').addClass('approvals').text(disapprovals + ' Disaprove');
+    var close = $('<span>').addClass('close-btn').html('&times;');
 		var title = $('<h1>').addClass('popover-title').append(count)
                 .append(approval).append(disapproval).append(close);
 
 		return title;
 	}
 
-        function createPopoverContent(comments) {
-            var content = $('<ul>').addClass('content-inner');
-            if(comments && comments.length > 0) {
-                var innerContent;
-                for(var i=0; i< comments.length; i++) {
-                    innerContent += '<li><strong>' + comments[i].name + '</strong>' + comments[i].text + '</li>';
-                }
-                content.html(innerContent);
-            } else {
-                content.html('<li class="no-comments">Be the first to comment.</li>');
-            }
-            return content;
-        }
+  function createPopoverContent(comments) {
+    var content = $('<ul />').addClass('content-inner');
+    
+    if (comments && comments.length != 0) {
+      $.each(comments, function(index, comment) {
+        $('<li></li>').addClass('comment').text(comment.text).prepend($('<strong />').text(comment.name + ':')).appendTo(content);
+      });
+    } else {
+      content.html('<li class="no-comments">No one has commented yet. Why don\'t you be the first?</li>');
+    }
 
-        function createPopoverFooter() {
-            var addCommentName = $('<input>').addClass('add-comment-name').attr('placeholder', 'Your Name');
-            var addCommentEmail = $('<input>').addClass('add-comment-email').attr('placeholder', 'Your Email Address')
-            var addCommentText = $('<textarea>').addClass('add-comment-text').attr('cols', 1);
-            var copyright = $('<a href="http://' + baseUrl + '">').addClass('copyright').html('&copy; Comment Genius 2013')
-            var footer = $('<div>').addClass('footer clearfix').append(addCommentEmail)
-            .append(addCommentName).append(addCommentText).append(copyright);
-            return footer;
-        }
+    return content;
+  }
+
+  function createPopoverFooter() {
+      var addCommentName = $('<input>').addClass('add-comment-name').attr('placeholder', 'Your Name');
+      var addCommentEmail = $('<input>').addClass('add-comment-email').attr('placeholder', 'Your Email Address')
+      var addCommentText = $('<textarea>').addClass('add-comment-text').attr('cols', 1);
+      var copyright = $('<a href="http://' + baseUrl + '">').addClass('copyright').html('&copy; Comment Genius 2013')
+      var footer = $('<div>').addClass('footer clearfix').append(addCommentEmail)
+      .append(addCommentName).append(addCommentText).append(copyright);
+      return footer;
+  }
 
 	$(document).ready(function() {
-		selector = getSelector();
-		article = getArticleIdentifier();
-		elementMap = getCommentableMap();
-		comments = fetchComments();
+    var myScriptTag = $('script').last(),
+    baseUrl = getBaseUrl(myScriptTag),
+		selector = getSelector(myScriptTag),
+		articleId = getArticleIdentifier();
+
+    populateComments(baseUrl, articleId, selector);
 
 		if (myScriptTag.data('style') !== 'off') {
-                        $.get('//' + getBaseUrl() + '/css/default-theme.css', function(response){
-                            injectStyles(response);
-                        });
+      $.get('//' + getBaseUrl() + '/css/default-theme.css', function(response){
+          injectStyles(response);
+      });
 		}
 	});
 
