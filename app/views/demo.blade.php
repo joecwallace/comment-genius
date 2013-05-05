@@ -2,7 +2,7 @@
 
 @section('scripts')
 	@parent
-	<script id="comment-genius" type="text/javascript" src="//192.168.14.148:8000/js/cg.js"></script>
+	<script id="comment-genius" type="text/javascript" src="//{{ preg_replace('/^https?:/', '', Request::root()) }}/js/cg.js"></script>
 @stop
 
 @section('content')
