@@ -131,12 +131,12 @@ function($) {
   }
 
   function createPopoverFooter(baseUrl) {
-      var addCommentName = $('<input>').addClass('add-comment-name').attr('placeholder', 'Your Name');
-      var addCommentEmail = $('<input>').addClass('add-comment-email').attr('placeholder', 'Your Email Address')
+      var addCommentName = $('<input>').addClass('add-comment-name').attr('placeholder', 'Name');
+      var addCommentEmail = $('<input>').addClass('add-comment-email').attr('placeholder', 'Email')
       var addCommentText = $('<textarea>').addClass('add-comment-text').attr('cols', 1);
       var copyright = $('<a href="http://' + baseUrl + '">').addClass('copyright').html('&copy; Comment Genius 2013')
-      var footer = $('<div>').addClass('footer clearfix').append(addCommentEmail)
-      .append(addCommentName).append(addCommentText).append(copyright);
+      var footer = $('<div>').addClass('footer clearfix').append(addCommentText)
+        .append(addCommentEmail).append(addCommentName).append(copyright);
       return footer;
   }
 
