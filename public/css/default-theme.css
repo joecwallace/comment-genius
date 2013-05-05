@@ -1,8 +1,18 @@
 .badge {
+	background-color: #999;
+	border-radius: 9px;
+	color: #fff;
 	cursor: pointer;
-    position: relative;
-    top: -4px;
-    margin-left: 6px;
+	display: inline-block;
+	font-size: 10px;
+	font-weight: bold;
+	line-height: 14px;
+	padding: 2px 4px;
+	position: relative;
+	top: -4px;
+	margin-left: 6px;
+	vertical-align: baseline;
+	white-space: nowrap;
 }
 .badge:after {
     border-left: 4px solid #999;
@@ -10,7 +20,7 @@
     border-right: 4px solid transparent;
     border-bottom: 4px solid transparent;
     display: block;
-    content: '';
+    content: "";
     height: 0;
     width: 0;
     position: absolute;
@@ -19,8 +29,12 @@
 .popover {
     background: #ddd;
     border: 5px solid #999;
+    border-radius: 6px;
+    font-size: 16px;
     max-width: 400px;
     padding: 0;
+    position: absolute;
+    text-align: left;
     width: 400px;
 }
 .popover .title {
@@ -121,6 +135,8 @@
     float: right;
     font-size: 10px;
     font-style: italic;
+    line-height: 24px;
+    text-decoration: none;
 }
 
 .popover .footer button {
