@@ -72,7 +72,7 @@
 }
 
 .popover .content-inner li:nth-child(2n) {
-	background-color: #EEE;
+	background-color: #f8f8f8;
 }
 
 .popover .content-inner li.no-comments {
@@ -90,20 +90,22 @@
 .popover .footer .add-comment-email{
     border: 1px solid rgba(0,0,125,0.2);
     border-radius: 4px;
+    min-height: 20px;
     padding: 2px 4px;
     margin: 2px 0;
     width: 180px;
 }
 .popover .footer .add-comment-name {
-    float: right;
+    float: left;
 }
 .popover .footer .add-comment-email {
-    float: left;
+    float: right;
 }
 .popover .footer textarea {
     border: 1px solid rgba(0,0,125,0.2);
     display: block;
     margin: 0 auto;
+    max-width: 380px;
     width: 380px;
 }
 .popover .footer .approval {

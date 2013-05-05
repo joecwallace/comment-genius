@@ -120,6 +120,9 @@ require([ 'jquery', 'jquery-sha256', 'jquery-popover' ], function($) {
 
 				$.post($(this).attr('action'), $(this).serialize(), function(comment) {
 					insertComment(comment);
+
+					$('.add-comment-text', this).animate({ height: textAreaConfig.blurHeight });
+					$('.add-comment-email, .add-comment-name, .submit-neutral').slideUp();
 				}, 'json');
 			});
 
