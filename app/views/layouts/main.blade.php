@@ -12,8 +12,11 @@
 		<div class="container container-narrow">
 			<div class="masthead">
 				<ul class="nav nav-pills pull-right">
-					<li class="{{ Request::is('/') ? 'active' : '' }}">
-						<a href="{{ URL::to('/') }}">Home</a>
+					<li>
+						<a href="#demo">Demo</a>
+					</li>
+					<li>
+						<a href="#docs">Docs</a>
 					</li>
 					<li>
 						<a href="#signup-modal" data-toggle="modal">Sign up</a>

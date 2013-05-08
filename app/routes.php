@@ -34,8 +34,4 @@ Route::any('logout', array(
 	'uses' => 'UsersController@logout',
 ));
 
-Route::get('demo', function() {
-	return View::make('demo');
-});
-
 Route::get('/', 'HomeController@showHome');
