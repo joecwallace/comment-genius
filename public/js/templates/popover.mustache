@@ -1,0 +1,18 @@
+<span class="comment-count">0 Comments</span>
+<span class="close-btn">&times;</span>
+<ul class="content-inner">
+	<li class="no-comments">Be the first to comment.</li>
+</ul>
+<div class="footer clearfix">
+	<form class="add-comment-form" action="{{ action }}" method="POST">
+		<textarea name="text" class="add-comment-text" cols="1" style="height: {{ blurHeight }};"></textarea>
+		<input name="name" class="add-comment-name" placeholder="Name" maxlength="40" style="display: none;">
+		<input name="email" class="add-comment-email" placeholder="Email" maxlength="80" style="display: none;">
+		<input type="hidden" name="element_hash" value="{{ hash }}">
+		{{#siteId}}
+			<input type="hidden" name="site_id" value="{{ siteId }}">
+		{{/siteId}}
+		<button class="submit-neutral" disabled="disabled" style="display: none;">Submit</button>
+		<a href="{{ home }}" class="copyright">© Comment Genius 2013</a>
+	</form>
+</div>

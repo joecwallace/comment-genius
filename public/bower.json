@@ -12,6 +12,7 @@
     "less.js": "~1.4.0-b4",
     "jQuery.popover": "git://github.com/klaas4/jQuery.popover.git#~1.1.2",
     "jquery.sha256": "git://github.com/alexweber/jquery.sha256.git",
-    "require": "git://github.com/jrburke/requirejs.git"
+    "require": "git://github.com/jrburke/requirejs.git",
+    "mustache": "~0.7.2"
   }
 }

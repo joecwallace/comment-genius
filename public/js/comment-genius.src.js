@@ -8,6 +8,11 @@ var commentGenius = (function($) {
 		textAreaConfig = {
 			'focusHeight': '60px',
 			'blurHeight': '20px'
+		},
+		templates = {
+			widget: '{{> public/js/templates/widget.mustache }}',
+			popover: '{{> public/js/templates/popover.mustache }}',
+			comment: '{{> public/js/templates/comment.mustache }}'
 		};
 
 	function getBaseUrl() {
@@ -99,7 +104,9 @@ var commentGenius = (function($) {
 
 		$(selector).each(function() {
 			var hash = $.sha256($(this).text()),
-				widget = $('<span />').addClass('badge comment-genius-widget').text('0'),
+				widget = $(
+					Mustache.render(templates.widget, {})
+				),
 				popover = null;
 
 			$(this).data('hash', hash);
@@ -110,17 +117,27 @@ var commentGenius = (function($) {
 			}
 			widget.popover({
 				hideOnHTMLClick: false,
-				title: createPopoverTitle(),
-				content: createPopoverContent(hash)
-			}).click(function() {
+				content: Mustache.render(templates.popover, {
+					action: 'http:' + urlTo(getArticleIdentifier() + '/comments'),
+					hash: hash,
+					siteId: myScriptTag.data('siteId'),
+					blurHeight: textAreaConfig.blurHeight,
+					home: baseUrl
+				}),
+				classes: 'comment-genius-popover'
+			}).click(function(evt) {
+				evt.preventDefault();
+
 				$(this).popover('hideAll');
 				$(this).popover('show');
 			});
 
 			popover = getPopoverForWidget(widget);
 
+			popover.removeClass('popover');
+
 			popover.find('.close-btn').click(function() {
-				var popover = $(this).parents('.popover');
+				var popover = $(this).parents('.comment-genius-popover');
 
 				popover.hide();
 
@@ -200,8 +217,10 @@ var commentGenius = (function($) {
 	}
 
 	function createCommentElement(comment) {
-		return $('<li />').addClass('comment').text(comment.text)
-			.prepend($('<strong />').text(comment.name + ': '));
+		return Mustache.render(templates.comment, {
+			name: comment.name,
+			text: comment.text
+		});
 	}
 
 	function populateComments(since) {
@@ -227,67 +246,6 @@ var commentGenius = (function($) {
 				populateComments(lastUpdateTime);
 			}, 10000);
 		});
-	}
-
-	function createPopoverTitle() {
-		var count = $('<span />').addClass('comment-count').text('0 Comments'),
-			close = $('<span />').addClass('close-btn').html('&times;'),
-			title = $('<h1 />').addClass('popover-title').append(count).append(close);
-
-		return title;
-	}
-
-	function createPopoverContent(hash) {
-		var content = $('<div />').append(createPopoverInner()).append(createPopoverFooter(hash));
-
-		return content;
-	}
-
-	function createPopoverInner() {
-		var emptyMessage = $('<li />').addClass('no-comments').text('Be the first to comment.');
-
-		return $('<ul />').addClass('content-inner').append(emptyMessage);
-	}
-
-	function createPopoverFooter(hash) {
-		var url = 'http:' + urlTo(getArticleIdentifier() + '/comments'),
-			form = $('<form />');
-
-		var commentTextInput = $('<textarea>').attr('name', 'text')
-			.addClass('add-comment-text').attr('cols', 1)
-			.css({ height: textAreaConfig.blurHeight });
-
-		var commentNameInput = $('<input>').attr('name', 'name')
-			.addClass('add-comment-name').attr('placeholder', 'Name')
-			.attr('maxlength', 40).hide();
-
-		var commentEmailInput = $('<input>').attr('name', 'email')
-			.addClass('add-comment-email').attr('placeholder', 'Email')
-			.attr('maxlength', 80).hide();
-
-		var hashInput = $('<input>').attr('type', 'hidden').attr('name', 'element_hash').val(hash);
-
-		var siteIdInput = '';
-		var siteId = myScriptTag.data('siteId');
-		if (siteId) {
-			siteIdInput = $('<input>').attr('type', 'hidden').attr('name', 'site_id').val(siteId);
-		}
-
-		var submitButton = $('<button>')
-			.addClass('submit-neutral').attr('disabled', 'disabled').text('Submit').hide();
-
-		var copyright = $('<a />').attr('href', 'http://' + baseUrl)
-			.addClass('copyright').html('&copy; Comment Genius 2013');
-
-		form.attr({
-			class: 'add-comment-form',
-			action: url,
-			method: 'POST'
-		}).append(commentTextInput).append(commentNameInput)
-		.append(commentEmailInput).append(hashInput).append(siteIdInput)
-		.append(submitButton).append(copyright);
-
-		return $('<div />').addClass('footer clearfix').append(form);
 	}
 
 	function init() {

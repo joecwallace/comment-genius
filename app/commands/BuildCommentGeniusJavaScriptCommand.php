@@ -39,7 +39,7 @@ class BuildCommentGeniusJavaScriptCommand extends Command {
 	 *
 	 * @var string
 	 */
-	protected $stylePath = 'public/css/default-theme.css';
+	protected $stylePath = 'public/less/cg-default-theme.less';
 
 	/**
 	 * The script's dependencies will be concatenated in order listed.
@@ -51,6 +51,7 @@ class BuildCommentGeniusJavaScriptCommand extends Command {
 		'public/components/jquery/jquery.js',
 		'public/components/jquery.sha256/jquery.sha256.js',
 		'public/components/jQuery.popover/jquery.popover-1.1.2.js',
+		'public/components/mustache/mustache.js',
 
 	);
 
@@ -60,6 +61,13 @@ class BuildCommentGeniusJavaScriptCommand extends Command {
 	 * @var string
 	 */
 	protected $cssPlaceholder = '(-(-_(-_-)_-)-)'; // Nothing to see here
+
+	/**
+	* A regex for inserting Mustache templates into JS
+	*
+	* @var string
+	*/
+	protected $mustacheRegex = '/\{\{>\s*([A-Za-z0-9\/\.-]+\.mustache)\s*\}\}/';
 
 	/**
 	 * Create a new command instance.
@@ -106,9 +114,8 @@ class BuildCommentGeniusJavaScriptCommand extends Command {
 		}
 
 		$sourceContents = file_get_contents($source);
-		$styleContents = $this->getStylesheet();
-
-		$sourceContents = str_replace($this->cssPlaceholder, $styleContents, $sourceContents);
+		$sourceContents = $this->insertStylesheet($sourceContents);
+		$sourceContents = $this->insertMustacheTemplates($sourceContents);
 
 		file_put_contents($destination, $sourceContents, FILE_APPEND);
 	}
@@ -128,11 +135,40 @@ class BuildCommentGeniusJavaScriptCommand extends Command {
 	 *
 	 * @return string
 	 */
-	function getStylesheet()
+	function insertStylesheet($source)
 	{
-		$contents = file_get_contents($this->stylePath);
+		$less = new lessc;
 
-		return preg_replace('/\s+/ism', ' ', $contents);
+		$less->setFormatter('compressed');
+
+		$css = $less->compileFile(base_path() . '/' . $this->stylePath);
+
+		return str_replace($this->cssPlaceholder, $css, $source);
+	}
+
+	/**
+	 * Inserts Mustache templates.
+	 *
+	 * @return void
+	 */
+	function insertMustacheTemplates($source)
+	{
+		$matches = array();
+
+		preg_match_all($this->mustacheRegex, $source, $matches);
+
+		if (count($matches) > 1)
+		{
+			for ($i = 0; $i < count($matches[0]); $i++)
+			{
+				$template = file_get_contents(base_path() . '/' . $matches[1][$i]);
+				$template = preg_replace('/\s+/ism', ' ', $template);
+
+				$source = str_replace($matches[0][$i], $template, $source);
+			}
+		}
+
+		return $source;
 	}
 
 	/**
