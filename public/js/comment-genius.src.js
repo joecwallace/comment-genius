@@ -5,10 +5,6 @@ var commentGenius = (function($) {
 	var myScriptTag = $('script').last(),
 		baseUrl = getBaseUrl(myScriptTag),
 		lastUpdateTime = new Date(0),
-		textAreaConfig = {
-			'focusHeight': '60px',
-			'blurHeight': '20px'
-		},
 		templates = {
 			widget: '{{> public/js/templates/widget.mustache }}',
 			popover: '{{> public/js/templates/popover.mustache }}',
@@ -67,14 +63,9 @@ var commentGenius = (function($) {
 	}
 
 	function toggleCommentForm(form, show) {
-		form.find('.add-comment-text').animate({
-			height: show ? textAreaConfig.focusHeight : textAreaConfig.blurHeight
-		});
-
 		var inputs = form.find('.add-comment-name, .add-comment-email, .submit-neutral');
 
-		if (show) inputs.slideDown();
-		else inputs.slideUp();
+		form.toggleClass('active', show);
 	}
 
 	function injectStyles() {
@@ -121,27 +112,28 @@ var commentGenius = (function($) {
 					action: 'http:' + urlTo(getArticleIdentifier() + '/comments'),
 					hash: hash,
 					siteId: myScriptTag.data('siteId'),
-					blurHeight: textAreaConfig.blurHeight,
 					home: baseUrl
 				}),
 				classes: 'comment-genius-popover'
 			}).click(function(evt) {
-				evt.preventDefault();
-
 				$(this).popover('hideAll');
 				$(this).popover('show');
+
+				evt.preventDefault();
 			});
 
 			popover = getPopoverForWidget(widget);
 
 			popover.removeClass('popover');
 
-			popover.find('.close-btn').click(function() {
+			popover.find('.close-btn').click(function(evt) {
 				var popover = $(this).parents('.comment-genius-popover');
 
 				popover.hide();
 
 				toggleCommentForm(popover.find('.add-comment-form'), false);
+
+				evt.preventDefault();
 			});
 
 			popover.find('.add-comment-text').focus(function() {
@@ -158,7 +150,6 @@ var commentGenius = (function($) {
 			});
 
 			popover.find('.add-comment-form').submit(function(evt) {
-				evt.preventDefault();
 				var form = $(this);
 				var commentData = $(this).serialize()
 				var valid = validateCommentFormInput(this);
@@ -172,6 +163,8 @@ var commentGenius = (function($) {
 						toggleCommentForm(form, false);
 					}, 'json');
 				}
+
+				evt.preventDefault();
 			});
 
 			$(this).append(widget);
@@ -217,10 +210,7 @@ var commentGenius = (function($) {
 	}
 
 	function createCommentElement(comment) {
-		return Mustache.render(templates.comment, {
-			name: comment.name,
-			text: comment.text
-		});
+		return Mustache.render(templates.comment, comment);
 	}
 
 	function populateComments(since) {

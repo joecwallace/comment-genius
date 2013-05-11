@@ -143,6 +143,8 @@ class BuildCommentGeniusJavaScriptCommand extends Command {
 
 		$css = $less->compileFile(base_path() . '/' . $this->stylePath);
 
+		$css = str_replace("'", "\\'", $css);
+
 		return str_replace($this->cssPlaceholder, $css, $source);
 	}
 

@@ -1,18 +1,20 @@
-<span class="comment-count">0 Comments</span>
-<span class="close-btn">&times;</span>
+<h1 class="title">
+	<span class="comment-count">0 Comments</span>
+	<a class="close-btn" href="#">&times;</a>
+</h1>
 <ul class="content-inner">
 	<li class="no-comments">Be the first to comment.</li>
 </ul>
-<div class="footer clearfix">
+<div class="footer">
 	<form class="add-comment-form" action="{{ action }}" method="POST">
-		<textarea name="text" class="add-comment-text" cols="1" style="height: {{ blurHeight }};"></textarea>
-		<input name="name" class="add-comment-name" placeholder="Name" maxlength="40" style="display: none;">
-		<input name="email" class="add-comment-email" placeholder="Email" maxlength="80" style="display: none;">
+		<textarea name="text" class="add-comment-text" placeholder="Comment..."></textarea>
+		<input type="text" name="name" class="add-comment-name" placeholder="Name">
+		<input type="text" name="email" class="add-comment-email" placeholder="Email">
+		<input type="submit" class="submit-btn" value="Submit">
 		<input type="hidden" name="element_hash" value="{{ hash }}">
 		{{#siteId}}
 			<input type="hidden" name="site_id" value="{{ siteId }}">
 		{{/siteId}}
-		<button class="submit-neutral" disabled="disabled" style="display: none;">Submit</button>
-		<a href="{{ home }}" class="copyright">© Comment Genius 2013</a>
 	</form>
+	<a href="http://{{ home }}" class="copyright">© Comment Genius 2013</a>
 </div>
