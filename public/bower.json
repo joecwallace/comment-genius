@@ -10,8 +10,6 @@
     "jquery": "~2.0.0",
     "bootstrap": "~2.3.1",
     "less.js": "~1.4.0-b4",
-    "jQuery.popover": "git://github.com/klaas4/jQuery.popover.git#~1.1.2",
-    "jquery.sha256": "git://github.com/alexweber/jquery.sha256.git",
     "require": "git://github.com/jrburke/requirejs.git",
     "mustache": "~0.7.2",
     "javascript-md5": "git://github.com/yinyin/javascript-md5.git"
