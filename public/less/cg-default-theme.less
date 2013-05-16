@@ -35,148 +35,157 @@
     width: 0;
 }
 
-.comment-genius-popover {
+.comment-genius-popover-element {
 
-	@import "../components/bootstrap/less/variables.less";
-	@import "../components/bootstrap/less/mixins.less";
-	@import "../components/bootstrap/less/forms.less";
-	@import "../components/bootstrap/less/buttons.less";
+	.popover {
 
-	background: #fff;
-	border: 4px solid @backgroundColor;
-	border-radius: 12px;
-	box-shadow: 1px 2px 4px #444;
-	color: @textColor;
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	max-width: 600px;
-	min-width: 300px;
-	padding: 8px 16px;
-	position: absolute;
-	width: 50%;
+		@import "../components/bootstrap/less/variables.less";
+		@import "../components/bootstrap/less/mixins.less";
 
-	.content {
+		@import "../components/bootstrap/less/buttons.less";
+		@import "../components/bootstrap/less/forms.less";
+		@import "../components/bootstrap/less/popovers.less";
 
-		.title {
-			border-bottom: 1px solid #ccc;
-			font-size: 20px;
-			font-weight: bold;
-			line-height: 40px;
+		background: #fff;
+		border: 4px solid @backgroundColor;
+		border-radius: 12px;
+		box-shadow: 1px 2px 4px #444;
+		color: @textColor;
+		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+		max-width: 600px;
+		min-width: 300px;
+		padding: 8px 16px;
+		position: absolute;
+		width: 50%;
+		z-index: 99;
+
+		.popover-content {
 			margin: 0;
-
-			.close-btn {
-				border-radius: 6px;
-				color: @textColor;
-				float: right;
-				line-height: 12px;
-				margin: 6px 0;
-				padding: 8px;
-				text-decoration: none;
-
-				&:hover {
-					background: lighten(@backgroundColor, 40%);
-					text-decoration: none;
-				}
-			}
-
-		}
-
-		.content-inner {
-			list-style: none;
-			margin: 0;
-			max-height: 300px;
-			overflow: hidden;
-			overflow-y: auto;
 			padding: 0;
 
-			.no-comments {
-				font-style: italic;
-				padding: 8px 16px;
-				text-align: center;
-			}
+			.title {
+				border-bottom: 1px solid #ccc;
+				font-size: 20px;
+				font-weight: bold;
+				line-height: 40px;
+				margin: 0;
 
-			.comment {
-				padding: 8px 16px;
-
-				&:nth-child(odd) {
-					background: #eee;
-				}
-
-				.avatar {
-					vertical-align: middle;
-				}
-
-				pre {
-					background: inherit;
-					border: none;
-					margin: 8px 0;
-					padding: 0;
-				}
-
-			}
-		}
-
-		.footer {
-			border-top: 1px solid #ccc;
-
-			.add-comment-form {
-				margin: 20px 0;
-
-				.add-comment-text, .add-comment-name, .add-comment-email {
-					box-sizing: border-box;
-					-moz-box-sizing: border-box;
-					-webkit-box-sizing: border-box;
-					height: 30px;
-				}
-
-				.add-comment-text {
-					width: 100%;
-				}
-
-				.add-comment-name {
-					float: left;
-				}
-				.add-comment-email {
+				.close-btn {
+					border-radius: 6px;
+					color: @textColor;
 					float: right;
+					line-height: 12px;
+					margin: 6px 0;
+					padding: 8px;
+					text-decoration: none;
+
+					&:hover {
+						background: lighten(@backgroundColor, 40%);
+						text-decoration: none;
+					}
 				}
 
-				.add-comment-name, .add-comment-email {
-					width: 49%;
+			}
+
+			.content-inner {
+				list-style: none;
+				margin: 0;
+				max-height: 300px;
+				overflow: hidden;
+				overflow-y: auto;
+				padding: 0;
+
+				.no-comments {
+					font-style: italic;
+					padding: 8px 16px;
+					text-align: center;
 				}
 
-				.submit-btn {
-					.btn;
-				}
+				.comment {
+					padding: 8px 16px;
 
-				.add-comment-name, .add-comment-email, .submit-btn {
-					display: none;
-				}
+					&:nth-child(odd) {
+						background: #eee;
+					}
 
-				&.active {
-					margin-bottom: 0;
+					.avatar {
+						vertical-align: middle;
+					}
+
+					pre {
+						background: inherit;
+						border: none;
+						margin: 8px 0;
+						padding: 0;
+					}
+
+				}
+			}
+
+			.footer {
+				border-top: 1px solid #ccc;
+
+				.add-comment-form {
+					margin: 20px 0;
+
+					.add-comment-text, .add-comment-name, .add-comment-email {
+						box-sizing: border-box;
+						-moz-box-sizing: border-box;
+						-webkit-box-sizing: border-box;
+						height: 30px;
+					}
 
 					.add-comment-text {
-						height: 110px;
+						width: 100%;
+					}
+
+					.add-comment-name {
+						float: left;
+					}
+					.add-comment-email {
+						float: right;
+					}
+
+					.add-comment-name, .add-comment-email {
+						width: 49%;
+					}
+
+					.submit-btn {
+						.btn;
 					}
 
 					.add-comment-name, .add-comment-email, .submit-btn {
-						display: inline-block;
+						display: none;
+					}
+
+					&.active {
+						margin-bottom: 0;
+
+						.add-comment-text {
+							height: 110px;
+						}
+
+						.add-comment-name, .add-comment-email, .submit-btn {
+							display: inline-block;
+						}
+
 					}
 
 				}
 
-			}
+				.copyright {
+					bottom: 8px;
+					color: #ddd;
+					position: absolute;
+					right: 16px;
+					text-decoration: none;
 
-			.copyright {
-				bottom: 8px;
-				color: #ddd;
-				position: absolute;
-				right: 16px;
-				text-decoration: none;
-
-				&:hover {
-					color: #ccc;
-					text-decoration: underline;
+					&:hover {
+						color: #ccc;
+						text-decoration: underline;
+					}
 				}
+
 			}
 
 		}

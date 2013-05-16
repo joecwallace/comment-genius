@@ -50,7 +50,8 @@ class BuildCommentGeniusJavaScriptCommand extends Command {
 
 		'public/components/jquery/jquery.js',
 		'public/components/javascript-md5/md5.js',
-		'public/components/jQuery.popover/jquery.popover-1.1.2.js',
+		'public/components/bootstrap/js/bootstrap-tooltip.js',
+		'public/components/bootstrap/js/bootstrap-popover.js',
 		'public/components/mustache/mustache.js',
 
 	);

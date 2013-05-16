@@ -3,14 +3,22 @@
 	<a class="close-btn" href="#">&times;</a>
 </h1>
 <ul class="content-inner">
-	<li class="no-comments">Be the first to comment.</li>
+	{{^comments}}
+		<li class="no-comments">Be the first to comment.</li>
+	{{/comments}}
+	{{#comments}}
+		<li class="comment">
+			<strong><img class="avatar" src="//www.gravatar.com/avatar/{{ email_hash }}?s=20"> {{ name }}</strong>
+			<pre>{{ text }}</pre>
+		</li>
+	{{/comments}}
 </ul>
 <div class="footer">
 	<form class="add-comment-form" action="{{ action }}" method="POST">
 		<textarea name="text" class="add-comment-text" placeholder="Comment..."></textarea>
 		<input type="text" name="name" class="add-comment-name" placeholder="Name">
 		<input type="text" name="email" class="add-comment-email" placeholder="Email">
-		<input type="submit" class="submit-btn" value="Submit">
+		<input type="submit" class="submit-btn" value="Submit" disabled="disabled">
 		<input type="hidden" name="element_hash" value="{{ hash }}">
 		{{#siteId}}
 			<input type="hidden" name="site_id" value="{{ siteId }}">
