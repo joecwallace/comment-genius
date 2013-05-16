@@ -43,7 +43,7 @@ var commentGenius = (function($) {
 	}
 
 	function getArticleIdentifier() {
-		return $.sha256(location.host + location.pathname);
+		return md5(location.host + location.pathname);
 	}
 
 	function getElementFromHash(hash) {
@@ -94,7 +94,7 @@ var commentGenius = (function($) {
 		var selector = getSelector();
 
 		$(selector).each(function() {
-			var hash = $.sha256($(this).text()),
+			var hash = md5($(this).text()),
 				widget = $(
 					Mustache.render(templates.widget, {})
 				),
@@ -210,6 +210,8 @@ var commentGenius = (function($) {
 	}
 
 	function createCommentElement(comment) {
+		comment.email_hash = md5(comment.email);
+		
 		return Mustache.render(templates.comment, comment);
 	}
 

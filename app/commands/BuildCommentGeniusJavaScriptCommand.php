@@ -49,7 +49,7 @@ class BuildCommentGeniusJavaScriptCommand extends Command {
 	protected $dependencies = array(
 
 		'public/components/jquery/jquery.js',
-		'public/components/jquery.sha256/jquery.sha256.js',
+		'public/components/javascript-md5/md5.js',
 		'public/components/jQuery.popover/jquery.popover-1.1.2.js',
 		'public/components/mustache/mustache.js',
 
