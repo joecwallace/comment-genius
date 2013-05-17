@@ -109,12 +109,17 @@ var commentGenius = (function($) {
 				$(this).popover('show');
 			}).popover({
 				content: function() {
+					var comments = commentMap[hash];
+
 					return Mustache.render(templates.popover, {
+						title: function() {
+							return comments.length + ' comment' + (comments.length == 1 ? '' : 's');
+						},
+						comments: comments,
 						action: 'http:' + urlTo(getArticleIdentifier() + '/comments'),
 						hash: hash,
 						siteId: myScriptTag.data('siteId'),
-						home: baseUrl,
-						comments: commentMap[hash]
+						home: baseUrl
 					});
 				},
 				placement: function() {
