@@ -35,6 +35,23 @@ class BuildStylesCommand extends Command {
 	protected $cssDestinationPath = 'public/css/main.css';
 
 	/**
+	 * Paths of any images that should be placed in the image directory.
+	 *
+	 * @var array
+	 */
+	protected $imgSourcePaths = array(
+		'public/components/bootstrap/img/glyphicons-halflings.png',
+		'public/components/bootstrap/img/glyphicons-halflings-white.png',
+	);
+
+	/**
+	 * Path to the image directory.
+	 *
+	 * @var string
+	 */
+	protected $imgDestinationPath = 'public/img';
+
+	/**
 	 * Create a new command instance.
 	 *
 	 * @return void
@@ -51,7 +68,21 @@ class BuildStylesCommand extends Command {
 	 */
 	public function fire()
 	{
+		$this->copyImages();
 		$this->compile();
+	}
+
+	/**
+	 * Copies image resources
+	 *
+	 * @return void
+	 */
+	protected function copyImages()
+	{
+		foreach ($this->imgSourcePaths as $image)
+		{
+			File::copy($image, $this->imgDestinationPath . '/' . basename($image));
+		}
 	}
 
 	/**

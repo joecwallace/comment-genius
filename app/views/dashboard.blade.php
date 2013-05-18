@@ -8,7 +8,7 @@
 
 	<div class="row-fluid">
 		<div class="span12">
-			<p class="pull-right">Welcome, {{ $user->name }} ({{ Html::linkRoute('logout', 'logout') }})</p>
+			<p class="pull-right">Welcome, {{ $user->name }} ({{ HTML::linkRoute('logout', 'logout') }})</p>
 		</div>
 	</div>
 	@if ($errors->any())
