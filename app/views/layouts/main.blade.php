@@ -33,7 +33,7 @@
 		@include('_partials.modals.signup')
 
 		<div class="footer">
-			<p>Comment Genius was created and conceived by <a href="http://twitter.com/joecwallace">@joecwallace</a><br>
+			<p>Comment Genius was conceived and created by <a href="http://twitter.com/joecwallace">@joecwallace</a><br>
 				with help from <a href="http://twitter.com/ThePsion5">@ThePsion5</a> and <a href="http://twitter.com/potetm">@potetm</a><br>
 				at <a href="http://hacknashville.com/">HackNashville</a>.</p>
 			<p class="power">Powered by <a href="http://laravel.com/">Laravel 4</a> and <a href="http://pagodabox.com/">PagodaBox</a>.</p>
