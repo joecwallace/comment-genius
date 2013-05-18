@@ -15,3 +15,5 @@ git push pagoda production:master --force
 
 git checkout master
 git branch -D production
+
+cd public && bower install && cd ..
