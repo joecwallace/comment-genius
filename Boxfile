@@ -27,3 +27,4 @@ web1:
     - "rm -f app/storage/cache/*"
     - "rm -f app/storage/views/*"
     - "php artisan cg:build"
+    - "php artisan cg:less"
