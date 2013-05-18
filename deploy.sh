@@ -1,5 +1,5 @@
 git checkout -b production
-cat '' > public/.gitignore
+echo '' > public/.gitignore
 git add .
 git commit -m "Deploy"
 git push pagoda production:master --force
