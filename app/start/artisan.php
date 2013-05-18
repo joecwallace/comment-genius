@@ -12,3 +12,4 @@
 */
 
 Artisan::add(new BuildCommentGeniusJavaScriptCommand);
+Artisan::add(new BuildStylesCommand);

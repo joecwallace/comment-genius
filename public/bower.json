@@ -9,7 +9,6 @@
   "dependencies": {
     "jquery": "~2.0.0",
     "bootstrap": "~2.3.1",
-    "less.js": "~1.4.0-b4",
     "require": "git://github.com/jrburke/requirejs.git",
     "mustache": "~0.7.2",
     "javascript-md5": "git://github.com/yinyin/javascript-md5.git"
