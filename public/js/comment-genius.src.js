@@ -4,6 +4,7 @@ var commentGenius = (function($) {
 
 	var myScriptTag = $('script').last(),
 		baseUrl = getBaseUrl(myScriptTag),
+		siteId = myScriptTag.data('siteId'),
 		commentMap = {},
 		lastUpdateTime = new Date(0),
 		templates = {
@@ -120,7 +121,7 @@ var commentGenius = (function($) {
 						comments: comments,
 						action: 'http:' + urlTo(getArticleIdentifier() + '/comments'),
 						hash: hash,
-						siteId: myScriptTag.data('siteId'),
+						siteId: siteId,
 						home: baseUrl
 					});
 				},
@@ -187,6 +188,10 @@ var commentGenius = (function($) {
 	function populateComments(since) {
 		var url = urlTo(getArticleIdentifier() + '/comments'),
 			data = {};
+
+		if (siteId !== undefined) {
+			data.site_id = siteId;
+		}
 
 		if (since !== undefined) {
 			data.since = formatDate(since);

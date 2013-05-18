@@ -9,7 +9,8 @@ class CommentsController extends \BaseController {
 	 */
 	public function index($article)
 	{
-		$query = Comment::where('article', $article);
+		$query = Comment::where('article', $article)
+			->where('site_key', Input::get('site_id', null));
 
 		if (Input::has('since'))
 		{
