@@ -60,7 +60,7 @@ var commentGenius = (function($) {
 	}
 
 	function toggleCommentForm(form, show) {
-		var inputs = form.find('.add-comment-name, .add-comment-email, .submit-btn');
+		var inputs = form.find('.comment-genius-add-comment-name, .comment-genius-add-comment-email, .comment-genius-submit-btn');
 
 		form.toggleClass('active', show);
 	}
@@ -113,7 +113,9 @@ var commentGenius = (function($) {
 
 					return Mustache.render(templates.popover, {
 						title: function() {
-							return comments.length + ' comment' + (comments.length == 1 ? '' : 's');
+							var count = comments ? comments.length : 0;
+
+							return count + ' comment' + (count == 1 ? '' : 's');
 						},
 						comments: comments,
 						action: 'http:' + urlTo(getArticleIdentifier() + '/comments'),
@@ -146,9 +148,9 @@ var commentGenius = (function($) {
 	function validateCommentFormInput(form) {
 		var $form = $(form);
 		var emailRegex = /\S+@\S+\.\S+/;
-		var nameField = $form.find('.add-comment-name'),
-			emailField = $form.find('.add-comment-email'),
-			textField = $form.find('.add-comment-text');
+		var nameField = $form.find('.comment-genius-add-comment-name'),
+			emailField = $form.find('.comment-genius-add-comment-email'),
+			textField = $form.find('.comment-genius-add-comment-text');
 		var validEmail = (emailRegex.test(emailField.val()));
 		var validName = (nameField.val().length > 1);
 		var validText = (textField.val().length > 2);
@@ -208,25 +210,25 @@ var commentGenius = (function($) {
 	}
 
 	function setPopoverEvents() {
-		$(document).on('click', '.close-btn', function(evt) {
+		$(document).on('click', '.comment-genius-close-btn', function(evt) {
 			$(this).closest('.popover').prev().popover('hide');
 			evt.preventDefault();
 		});
 
-		$(document).on('focus', '.add-comment-text', function() {
-			toggleCommentForm($(this).closest('.add-comment-form'), true);
+		$(document).on('focus', '.comment-genius-add-comment-text', function() {
+			toggleCommentForm($(this).closest('.comment-genius-add-comment-form'), true);
 		});
 
-		$(document).on('keyup', '.add-comment-text, .add-comment-name, .add-comment-email', function() {
-			var form = $(this).parents('.add-comment-form');
-			var submit = form.find('.submit-btn');
+		$(document).on('keyup', '.comment-genius-add-comment-text, .comment-genius-add-comment-name, .comment-genius-add-comment-email', function() {
+			var form = $(this).parents('.comment-genius-add-comment-form');
+			var submit = form.find('.comment-genius-submit-btn');
 
 			(validateCommentFormInput(form)) ?
 				submit.removeAttr('disabled') :
 				submit.attr('disabled', 'disabled');
 		});
 
-		$(document).on('submit', '.add-comment-form', function(evt) {
+		$(document).on('submit', '.comment-genius-add-comment-form', function(evt) {
 			var form = $(this);
 			var commentData = $(this).serialize()
 			var valid = validateCommentFormInput(this);
