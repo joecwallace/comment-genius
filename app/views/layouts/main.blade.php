@@ -7,6 +7,8 @@
 		<link rel="stylesheet" type="text/css" href="/css/main.css" media="screen">
 	</head>
 	<body>
+		@include('_partials.tracking.ga')
+		
 		<div class="container container-narrow">
 			<div class="masthead">
 				<ul class="nav nav-pills pull-right">
