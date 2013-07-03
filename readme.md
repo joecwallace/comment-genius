@@ -6,3 +6,7 @@
 1. ` php artisan serve `
 1. ` cd public `
 1. ` bower install `
+
+### License
+
+Comment Genius is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
